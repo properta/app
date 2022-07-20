@@ -5,10 +5,11 @@ use yii\widgets\ActiveForm;
 use app\utils\template\Template;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+
 $this->title = "Change Photo";
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
         <div class="card">
@@ -19,12 +20,12 @@ $this->title = "Change Photo";
             <div class="card-body col-6 m-auto">
                 <?php $form = ActiveForm::begin(); ?>
                 <?= $form->field($model, 'image', Template::image())->fileInput([
-                        'class'=>'filepond',
-                        'data-allow-reorder'=>true,
-                        'data-max-file-size'=>'3MB',
-                        'required'=>$model->image?false:true,
-                        'data-max-files'=>'1'
-                    ])->label('Upload Image') ?>
+                    'class' => 'filepond',
+                    'data-allow-reorder' => true,
+                    'data-max-file-size' => '3MB',
+                    'required' => $model->image ? false : true,
+                    'data-max-files' => '1'
+                ])->label('Upload Image') ?>
                 <div class="form-group">
                     <?= Html::submitButton($model->isNewRecord ? '<i class="fas fa-file"></i> Add New' : '<i class="fas fa-save"></i> Save', ['class' => 'btn btn-sm btn-primary m-1 float-right btn-submit']) ?>
                     <?= Html::a('<i class="fas fa-undo-alt"></i> Back', Yii::$app->request->referrer, ['class' => 'btn btn-sm btn-info m-1 float-right']);  ?>
@@ -36,10 +37,10 @@ $this->title = "Change Photo";
         </div>
     </div>
 </div>
-<?= Html::a('&nbsp;',[Url::to(['me'])], ['class'=>'redirectHelper', 'style'=>'display:none']);  ?>
+<?= Html::a('&nbsp;', [Url::to(['me'])], ['class' => 'redirectHelper', 'style' => 'display:none']);  ?>
 <?php
-$homeUrl=Yii::$app->homeUrl;
-$csrf=Yii::$app->request->getCsrfToken();
+$homeUrl = Yii::$app->homeUrl;
+$csrf = Yii::$app->request->getCsrfToken();
 $js = <<< JS
 $('document').ready(()=>{
     $(".btn-submit").prop("disabled", true);

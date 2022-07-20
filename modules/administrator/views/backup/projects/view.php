@@ -8,7 +8,7 @@ use yii\grid\GridView;
 $this->title = 'View Project';
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="row">
     <div class="col-12 col-lg-8 col-md-8">
         <div class="card">
@@ -67,25 +67,25 @@ $this->title = 'View Project';
                         <tr>
                             <td><strong>Created at</strong></td>
                             <td>:</td>
-                            <td><?= date("d/m/Y h:m:s" ,$model->created_at) ?></td>
+                            <td><?= date("d/m/Y h:m:s", $model->created_at) ?></td>
                         </tr>
                         <tr>
                             <td><strong>Created by Oleh</strong></td>
                             <td>:</td>
-                            <td><?= $model->createdBy->full_name??"-" ?></td>
+                            <td><?= $model->createdBy->full_name ?? "-" ?></td>
                         </tr>
                         <tr>
                             <td><strong>Status</strong></td>
                             <td>:</td>
-                            <td><?= $model->status==1 ? "<span class='badge badge-primary'>Active</span>" : "<span class='badge badge-warning'>Inactive</span>" ?>
+                            <td><?= $model->status == 1 ? "<span class='badge badge-primary'>Active</span>" : "<span class='badge badge-warning'>Inactive</span>" ?>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="form-group">
-                    <?= Html::a('<i class="fas fa-undo-alt"></i> Back', Yii::$app->request->referrer, ['class' => 'btn btn-sm btn-info m-1', 'style'=>'color:#fff', 'data-pjax'=>1]);  ?>
-                    <?= Html::a('<i class="fas fa-edit"></i> Update', Url::to(['update', 'code' => $encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1', 'style'=>'color:#fff', 'data-pjax'=>1]);  ?>
-                    <?= Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1', 'data-pjax'=>0, 'style'=>'color:#fff', 'id'=>'delete', 'data'=>$encryptor->encodeUrl($model->id), 'data-pjax'=>1]);  ?>
+                    <?= Html::a('<i class="fas fa-undo-alt"></i> Back', Yii::$app->request->referrer, ['class' => 'btn btn-sm btn-info m-1', 'style' => 'color:#fff', 'data-pjax' => 1]);  ?>
+                    <?= Html::a('<i class="fas fa-edit"></i> Update', Url::to(['update', 'code' => $encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1', 'style' => 'color:#fff', 'data-pjax' => 1]);  ?>
+                    <?= Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1', 'data-pjax' => 0, 'style' => 'color:#fff', 'id' => 'delete', 'data' => $encryptor->encodeUrl($model->id), 'data-pjax' => 1]);  ?>
                 </div>
             </div>
         </div>
@@ -111,16 +111,16 @@ $this->title = 'View Project';
                     <div class="form-group col-3">
                         <select name="role_id" class="form-control" id="get-role">
                             <option>Select Role</option>
-                            <?php foreach($settings as $val){ ?>
-                            <option value="<?=$val->id?>"><?=$val->value_?></option>
+                            <?php foreach ($settings as $val) { ?>
+                                <option value="<?= $val->id ?>"><?= $val->value_ ?></option>
                             <?php } ?>
                         </select>
                     </div>
                     <div class="form-group col-2">
                         <select name="interpreter_queue" class="form-control" id="get-role">
                             <option>Select Queue</option>
-                            <?php for($a = 1; $a<=5; $a++){ ?>
-                            <option value="<?=$a?>"><?=$a?></option>
+                            <?php for ($a = 1; $a <= 5; $a++) { ?>
+                                <option value="<?= $a ?>"><?= $a ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -129,71 +129,71 @@ $this->title = 'View Project';
                     </div>
                 </form>
                 <div class="table-responsive">
-                    <?php Pjax::begin(['id'=>'p1']); ?>
+                    <?php Pjax::begin(['id' => 'p1']); ?>
                     <?= GridView::widget([
-                                'dataProvider' => $projectUsers,
-                                // 'filterModel' => $searchModel,
-                                'tableOptions' => ['class' => 'table table-striped'],
-                                'summaryOptions' => ['class' => 'badge badge-light m-2'],
-                                'columns' => [
-                                    [
-                                        'class' => 'yii\grid\SerialColumn',
-                                        'header' => 'No.'
-                                    ],
-                                    [
-                                        'attribute' => 'user_id',
-                                        'label' => 'User',
-                                        'format' => 'raw',
-                                        'value' => function ($model) {
-                                            return $model->user->full_name ?? "-";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'company_id',
-                                        'label' => 'Company',
-                                        'format' => 'raw',
-                                        'value' => function ($model) {
-                                            return $model->company->name ?? "-";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'role',
-                                        'label' => 'Role',
-                                        'format' => 'raw',
-                                        'value' => function ($model) {
-                                            return $model->userRole->value_ ?? "-";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'queue',
-                                        'label' => "I'preter Qeueu",
-                                        'format' => 'raw',
-                                        'value' => function ($model) {
-                                            return $model->interpreter_queue ?? "-";
-                                        }
-                                    ],
-                                    [
-                                        'class' => 'yii\grid\ActionColumn',
-                                        'contentOptions' => ['style' => 'width:130px;'],
-                                        'header' => 'Action',
-                                        'visibleButtons' => [
-                                            'update' => false,
-                                            'delete' => true,
-                                            'view' => false,
-                                        ],
-                                        'template' => '{delete}',
-                                        'buttons' => array(
-                                            'delete' => function($url, $model, $key) use ($encryptor) {
-                                                return Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1 delete-user', 'style'=>'color:#fff', 'data'=>$encryptor->encodeUrl($model->id)]);
-                                            },
-                                        )
-                                    ],
-                                    [
-                                        'class' => 'yii\grid\CheckboxColumn',
-                                        'contentOptions' => ['style' => 'width:8px;'],
-                                    ],
+                        'dataProvider' => $projectUsers,
+                        // 'filterModel' => $searchModel,
+                        'tableOptions' => ['class' => 'table table-striped'],
+                        'summaryOptions' => ['class' => 'badge badge-light m-2'],
+                        'columns' => [
+                            [
+                                'class' => 'yii\grid\SerialColumn',
+                                'header' => 'No.'
+                            ],
+                            [
+                                'attribute' => 'user_id',
+                                'label' => 'User',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->user->full_name ?? "-";
+                                }
+                            ],
+                            [
+                                'attribute' => 'company_id',
+                                'label' => 'Company',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->company->name ?? "-";
+                                }
+                            ],
+                            [
+                                'attribute' => 'role',
+                                'label' => 'Role',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->userRole->value_ ?? "-";
+                                }
+                            ],
+                            [
+                                'attribute' => 'queue',
+                                'label' => "I'preter Qeueu",
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->interpreter_queue ?? "-";
+                                }
+                            ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'contentOptions' => ['style' => 'width:130px;'],
+                                'header' => 'Action',
+                                'visibleButtons' => [
+                                    'update' => false,
+                                    'delete' => true,
+                                    'view' => false,
                                 ],
-                            ]); ?>
+                                'template' => '{delete}',
+                                'buttons' => array(
+                                    'delete' => function ($url, $model, $key) use ($encryptor) {
+                                        return Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1 delete-user', 'style' => 'color:#fff', 'data' => $encryptor->encodeUrl($model->id)]);
+                                    },
+                                )
+                            ],
+                            [
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'contentOptions' => ['style' => 'width:8px;'],
+                            ],
+                        ],
+                    ]); ?>
 
 
 
@@ -208,20 +208,20 @@ $this->title = 'View Project';
 
                     <?php Pjax::end(); ?>
                 </div>
-                <?= Html::button('<i class="fas fa-trash"></i> Bulk Delete', ['class' => 'btn btn-sm btn-danger m-1 delete float-right', 'id'=>'bulkDelete', 'disabled'=>true]); ?>
+                <?= Html::button('<i class="fas fa-trash"></i> Bulk Delete', ['class' => 'btn btn-sm btn-danger m-1 delete float-right', 'id' => 'bulkDelete', 'disabled' => true]); ?>
             </div>
         </div>
 
     </div>
-    <?= Html::a('&nbsp;',[Url::to(['index'])], ['class'=>'redirectHelper', 'style'=>'display:none']);  ?>
+    <?= Html::a('&nbsp;', [Url::to(['index'])], ['class' => 'redirectHelper', 'style' => 'display:none']);  ?>
     <?php
 
-$mod = Yii::$app->controller->module->id;
-$con = Yii::$app->controller->id;
-$homeUrl = Yii::$app->homeUrl;
-$csrf = Yii::$app->request->getCsrfToken();
-$code = $encryptor->encodeUrl($model->id);
-$js = <<< JS
+    $mod = Yii::$app->controller->module->id;
+    $con = Yii::$app->controller->id;
+    $homeUrl = Yii::$app->homeUrl;
+    $csrf = Yii::$app->request->getCsrfToken();
+    $code = $encryptor->encodeUrl($model->id);
+    $js = <<< JS
 
 function processData(type, code){
     let url;
@@ -447,6 +447,6 @@ $('document').ready(()=>{
     })
 });
 JS;
-$this->registerJs($js);
-?>
+    $this->registerJs($js);
+    ?>
     <?php Pjax::end(); ?>

@@ -1,6 +1,8 @@
 <?php
+
 use yii\helpers\{
-    Html, Url
+    Html,
+    Url
 };
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -8,70 +10,70 @@ use yii\widgets\Pjax;
 $this->title = "Data of $title";
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="index">
     <div class="row">
         <div class="col-12">
             <p>
-                <?= Html::a("<i class='fa fa-plus'></i> $title", ['create', 'type'=>$type], ['class' => 'btn btn-info m-1']) ?>
+                <?= Html::a("<i class='fa fa-plus'></i> $title", ['create', 'type' => $type], ['class' => 'btn btn-info m-1']) ?>
             </p>
             <div class="card">
                 <div class="card-header">
-                    <h4> <?=  $this->title ?></h4>
+                    <h4> <?= $this->title ?></h4>
                     <div class="card-header-action">
-                        <?= $this->render('_search', ['model' => $searchModel, 'type'=>$type]); ?>
+                        <?= $this->render('_search', ['model' => $searchModel, 'type' => $type]); ?>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
-                                'dataProvider' => $dataProvider,
-                                // 'filterModel' => $searchModel,
-                                'tableOptions' => ['class' => 'table table-striped'],
-                                'summaryOptions' => ['class' => 'badge badge-light m-2'],
-                                'columns' => [
-                                    [
-                                        'class' => 'yii\grid\SerialColumn',
-                                        'header' => 'No.',
-                                        'contentOptions' => ['style' => 'width:100px;'],
-                                    ],
-                                    [
-                                        'attribute' => 'value',
-                                        'label' => 'Code',
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return $model->value??"-";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'value_',
-                                        'label' => 'Name',
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return $model->value_??"-";
-                                        }
-                                    ],
-                                    [
-                                        'class' => 'yii\grid\ActionColumn',
-                                        'contentOptions' => ['style' => 'width:300px;'],    
-                                        'header' => 'Action',
-                                        'visibleButtons' => [
-                                            'update' => true,
-                                            'delete' => true,
-                                            'view' => false,
-                                        ],
-                                        'template' => '{update}{delete}',
-                                        'buttons' => array(
-                                            'update' => function($url, $model, $key) {
-                                                return Html::a('<i class="fas fa-edit"></i> Update', Url::to(['update', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1']);
-                                            },
-                                            'delete' => function($url, $model, $key) {
-                                                return Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1 delete', 'data-pjax'=>0, 'style'=>'color:#fff', 'data'=>Yii::$app->encryptor->encodeUrl($model->id)]);
-                                            },
-                                        )
-                                    ],
+                            'dataProvider' => $dataProvider,
+                            // 'filterModel' => $searchModel,
+                            'tableOptions' => ['class' => 'table table-striped'],
+                            'summaryOptions' => ['class' => 'badge badge-light m-2'],
+                            'columns' => [
+                                [
+                                    'class' => 'yii\grid\SerialColumn',
+                                    'header' => 'No.',
+                                    'contentOptions' => ['style' => 'width:100px;'],
                                 ],
-                            ]); ?>
+                                [
+                                    'attribute' => 'value',
+                                    'label' => 'Code',
+                                    'format' => 'raw',
+                                    'value' => function ($model) {
+                                        return $model->value ?? "-";
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'value_',
+                                    'label' => 'Name',
+                                    'format' => 'raw',
+                                    'value' => function ($model) {
+                                        return $model->value_ ?? "-";
+                                    }
+                                ],
+                                [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'contentOptions' => ['style' => 'width:300px;'],
+                                    'header' => 'Action',
+                                    'visibleButtons' => [
+                                        'update' => true,
+                                        'delete' => true,
+                                        'view' => false,
+                                    ],
+                                    'template' => '{update}{delete}',
+                                    'buttons' => array(
+                                        'update' => function ($url, $model, $key) {
+                                            return Html::a('<i class="fas fa-edit"></i> Update', Url::to(['update', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1']);
+                                        },
+                                        'delete' => function ($url, $model, $key) {
+                                            return Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1 delete', 'data-pjax' => 0, 'style' => 'color:#fff', 'data' => Yii::$app->encryptor->encodeUrl($model->id)]);
+                                        },
+                                    )
+                                ],
+                            ],
+                        ]); ?>
                     </div>
                 </div>
             </div>

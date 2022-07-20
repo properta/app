@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 $this->title = 'View Company';
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="row">
     <div class="col-12 col-lg-8 col-md-8">
         <div class="card">
@@ -59,36 +59,36 @@ $this->title = 'View Company';
                         <tr>
                             <td><strong>Created at</strong></td>
                             <td>:</td>
-                            <td><?= date("d/m/Y h:m:s" ,$model->created_at) ?></td>
+                            <td><?= date("d/m/Y h:m:s", $model->created_at) ?></td>
                         </tr>
                         <tr>
                             <td><strong>Created by</strong></td>
                             <td>:</td>
-                            <td><?= $model->createdBy->full_name??"-" ?></td>
+                            <td><?= $model->createdBy->full_name ?? "-" ?></td>
                         </tr>
                         <tr>
                             <td><strong>Status</strong></td>
                             <td>:</td>
-                            <td><?= $model->status==1 ? "<span class='badge badge-primary'>Active</span>" : "<span class='badge badge-warning'>Inactive</span>" ?>
+                            <td><?= $model->status == 1 ? "<span class='badge badge-primary'>Active</span>" : "<span class='badge badge-warning'>Inactive</span>" ?>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="form-group">
-                    <?= Html::a('<i class="fas fa-undo-alt"></i> Back', Yii::$app->request->referrer, ['class' => 'btn btn-sm btn-info m-1', 'style'=>'color:#fff', 'data-pjax'=>1]);  ?>
-                    <?= Html::a('<i class="fas fa-edit"></i> Update', Url::to(['update', 'code' => $encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1', 'style'=>'color:#fff', 'data-pjax'=>1]);  ?>
-                    <?= Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1', 'data-pjax'=>0, 'style'=>'color:#fff', 'id'=>'delete', 'data'=>$encryptor->encodeUrl($model->id), 'data-pjax'=>1]);  ?>
+                    <?= Html::a('<i class="fas fa-undo-alt"></i> Back', Yii::$app->request->referrer, ['class' => 'btn btn-sm btn-info m-1', 'style' => 'color:#fff', 'data-pjax' => 1]);  ?>
+                    <?= Html::a('<i class="fas fa-edit"></i> Update', Url::to(['update', 'code' => $encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1', 'style' => 'color:#fff', 'data-pjax' => 1]);  ?>
+                    <?= Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1', 'data-pjax' => 0, 'style' => 'color:#fff', 'id' => 'delete', 'data' => $encryptor->encodeUrl($model->id), 'data-pjax' => 1]);  ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<?= Html::a('&nbsp;',[Url::to(['index'])], ['class'=>'redirectHelper', 'style'=>'display:none']);  ?>
+<?= Html::a('&nbsp;', [Url::to(['index'])], ['class' => 'redirectHelper', 'style' => 'display:none']);  ?>
 <?php
-$mod= Yii::$app->controller->module->id;
-$con= Yii::$app->controller->id;
-$homeUrl=Yii::$app->homeUrl;
-$csrf=Yii::$app->request->getCsrfToken();
+$mod = Yii::$app->controller->module->id;
+$con = Yii::$app->controller->id;
+$homeUrl = Yii::$app->homeUrl;
+$csrf = Yii::$app->request->getCsrfToken();
 $js = <<< JS
 
 function processData(type, code){

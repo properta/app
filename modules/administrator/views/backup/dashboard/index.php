@@ -1,9 +1,8 @@
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div>
     <h2 class="section-title">Short Report</h2>
     <p class="section-lead">
-        We use 'iziToast' made by @Dolce. You can check the full documentation <a
-            href="https://izitoast.marcelodolza.com/">here</a>.
+        We use 'iziToast' made by @Dolce. You can check the full documentation <a href="https://izitoast.marcelodolza.com/">here</a>.
     </p>
 </div>
 

@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\{
     Html,
     Url,
@@ -11,7 +12,7 @@ $this->title = 'List Loker';
 
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="index">
     <div class="row">
         <div class="col-12">
@@ -20,7 +21,7 @@ $this->title = 'List Loker';
             </p>
             <div class="card">
                 <div class="card-header">
-                    <h4> <?=  $this->title ?></h4>
+                    <h4> <?= $this->title ?></h4>
                     <div class="card-header-action">
                         <?= $this->render('_search', ['model' => $searchModel]) ?>
                     </div>
@@ -28,88 +29,87 @@ $this->title = 'List Loker';
                 <div class="card-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
-                                'dataProvider' => $dataProvider,
-                                // 'filterModel' => $searchModel,
-                                'tableOptions' => ['class' => 'table table-striped'],
-                                'summaryOptions' => ['class' => 'badge badge-light m-2'],
-                                'columns' => [
-                                    [
-                                        'class' => 'yii\grid\SerialColumn',
-                                        'contentOptions' => ['style' => 'width:10px;'],    
-                                        'header' => 'No.'
-                                    ],
-                                    [
-                                        'attribute' => 'thumbnail',
-                                        'label' => 'Thumbnail',
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return $model->thumbnail?"<img src='{$model->thumbnail}' class='img-fluid lazy' style='width:68px' alt='thumnail'/>":"";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'title',
-                                        'label' => 'Title',
-                                        'format' => 'raw',
-                                        'contentOptions' => ['style' => 'width:300px;'],    
-                                        'value' => function($model){
-                                            return $model->title??"";
-
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'school_str',
-                                        'label' => 'School',
-                                        'format' => 'raw',
-                                        'contentOptions' => ['style' => 'width:300px;'],    
-                                        'value' => function($model){
-                                            $level = '';
-                                            switch ($model->school_level_str){
-                                                case 'paud':
-                                                    $level = 'Paud';
-                                                    break;
-                                                case 'sd':
-                                                    $level = 'SD/ Sederajat';
-                                                    break;
-                                                case 'smp':
-                                                    $level = 'SMP/ Sederajat';
-                                                    break;
-                                                case 'sma':
-                                                    $level = 'SMA/ Sederajat';
-                                                    break;
-                                                default:
-                                                    $level = 'Lainnya';
-                                                    break;
-                                            }
-                                            return $model->school_str?"<p>{$model->school_str}</p><p class='-tw-mt-4 tw-bg-red-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs tw-w-fit'>{$level}</p>":"";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'status',
-                                        'label' => 'Status',
-                                        'format' => 'raw',
-                                        'contentOptions' => ['style' => 'width:50px;'],    
-                                        'value' => function($model){
-                                            return $model->status==1?"<span class='tw-bg-green-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs'>Publish</span>":"<span class='tw-bg-blue-400 tw-text-xs tw-px-3 tw-py-1 tw-rounded-full tw-text-white'>Draft</span>";
-                                        }
-                                    ],
-                                    [
-                                        'class' => 'yii\grid\ActionColumn',
-                                        'contentOptions' => ['style' => 'width:150px;'],    
-                                        'header' => 'Action',
-                                        'visibleButtons' => [
-                                            'update' => false,
-                                            'delete' => false,
-                                            'view' => true,
-                                        ],
-                                        'template' => '{view}',
-                                        'buttons' => array(
-                                            'view' => function($url, $model, $key) {
-                                                return Html::a('<i class="fas fa-eye"></i> Detail', Url::to(['view', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-primary m-1']);
-                                            }
-                                        )
-                                    ],
+                            'dataProvider' => $dataProvider,
+                            // 'filterModel' => $searchModel,
+                            'tableOptions' => ['class' => 'table table-striped'],
+                            'summaryOptions' => ['class' => 'badge badge-light m-2'],
+                            'columns' => [
+                                [
+                                    'class' => 'yii\grid\SerialColumn',
+                                    'contentOptions' => ['style' => 'width:10px;'],
+                                    'header' => 'No.'
                                 ],
-                            ]); ?>
+                                [
+                                    'attribute' => 'thumbnail',
+                                    'label' => 'Thumbnail',
+                                    'format' => 'raw',
+                                    'value' => function ($model) {
+                                        return $model->thumbnail ? "<img src='{$model->thumbnail}' class='img-fluid lazy' style='width:68px' alt='thumnail'/>" : "";
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'title',
+                                    'label' => 'Title',
+                                    'format' => 'raw',
+                                    'contentOptions' => ['style' => 'width:300px;'],
+                                    'value' => function ($model) {
+                                        return $model->title ?? "";
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'school_str',
+                                    'label' => 'School',
+                                    'format' => 'raw',
+                                    'contentOptions' => ['style' => 'width:300px;'],
+                                    'value' => function ($model) {
+                                        $level = '';
+                                        switch ($model->school_level_str) {
+                                            case 'paud':
+                                                $level = 'Paud';
+                                                break;
+                                            case 'sd':
+                                                $level = 'SD/ Sederajat';
+                                                break;
+                                            case 'smp':
+                                                $level = 'SMP/ Sederajat';
+                                                break;
+                                            case 'sma':
+                                                $level = 'SMA/ Sederajat';
+                                                break;
+                                            default:
+                                                $level = 'Lainnya';
+                                                break;
+                                        }
+                                        return $model->school_str ? "<p>{$model->school_str}</p><p class='-tw-mt-4 tw-bg-red-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs tw-w-fit'>{$level}</p>" : "";
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'status',
+                                    'label' => 'Status',
+                                    'format' => 'raw',
+                                    'contentOptions' => ['style' => 'width:50px;'],
+                                    'value' => function ($model) {
+                                        return $model->status == 1 ? "<span class='tw-bg-green-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs'>Publish</span>" : "<span class='tw-bg-blue-400 tw-text-xs tw-px-3 tw-py-1 tw-rounded-full tw-text-white'>Draft</span>";
+                                    }
+                                ],
+                                [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'contentOptions' => ['style' => 'width:150px;'],
+                                    'header' => 'Action',
+                                    'visibleButtons' => [
+                                        'update' => false,
+                                        'delete' => false,
+                                        'view' => true,
+                                    ],
+                                    'template' => '{view}',
+                                    'buttons' => array(
+                                        'view' => function ($url, $model, $key) {
+                                            return Html::a('<i class="fas fa-eye"></i> Detail', Url::to(['view', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-primary m-1']);
+                                        }
+                                    )
+                                ],
+                            ],
+                        ]); ?>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,13 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\Pjax;
+
 $this->title = "Project Form";
 
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="create">
     <?= $this->render('_form', [
         'model' => $model

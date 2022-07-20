@@ -1,10 +1,12 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\Pjax;
+
 $this->title = 'Change Your Data';
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="update">
     <?= $this->render('_form', [
         'model' => $model,

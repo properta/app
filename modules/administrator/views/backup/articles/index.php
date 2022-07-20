@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\{
     Html,
     Url,
@@ -11,7 +12,7 @@ $this->title = 'List Artikel';
 
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="index">
     <div class="row">
         <div class="col-12">
@@ -20,7 +21,7 @@ $this->title = 'List Artikel';
             </p>
             <div class="card">
                 <div class="card-header">
-                    <h4> <?=  $this->title ?></h4>
+                    <h4> <?= $this->title ?></h4>
                     <div class="card-header-action">
                         <?= $this->render('_search', ['model' => $searchModel]) ?>
                     </div>
@@ -28,71 +29,71 @@ $this->title = 'List Artikel';
                 <div class="card-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
-                                'dataProvider' => $dataProvider,
-                                // 'filterModel' => $searchModel,
-                                'tableOptions' => ['class' => 'table table-striped'],
-                                'summaryOptions' => ['class' => 'badge badge-light m-2'],
-                                'columns' => [
-                                    [
-                                        'class' => 'yii\grid\SerialColumn',
-                                        'header' => 'No.'
-                                    ],
-                                    [
-                                        'attribute' => 'thumbnail',
-                                        'label' => 'Thumbnail',
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return $model->thumbnail?"<img src='{$model->thumbnail}' class='img-fluid lazy' style='width:68px' alt='thumnail'/>":"";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'created_at',
-                                        'label' => 'Tanggal Post',
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return $model->created_at? date('d/m/Y H:i:s', $model->created_at) :"-";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'title',
-                                        'label' => 'Title',
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return $model->title?"<p>{$model->title}</p><p class='-tw-mt-4 tw-text-xs tw-py-1 tw-px-3 tw-bg-slate-400 tw-rounded-full tw-text-white tw-w-fit'>{$model->category->value_}</p>":"-";
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'status',
-                                        'label' => 'Status',
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return $model->status==1?"<span class='tw-bg-green-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs'>Publish</span>":"<span class='tw-bg-blue-400 tw-text-xs tw-px-3 tw-py-1 tw-rounded-full tw-text-white'>Draft</span>";
-                                        }
-                                    ],
-                                    [
-                                        'class' => 'yii\grid\ActionColumn',
-                                        'contentOptions' => ['style' => 'width:300px;'],    
-                                        'header' => 'Action',
-                                        'visibleButtons' => [
-                                            'update' => true,
-                                            'delete' => true,
-                                            'view' => true,
-                                        ],
-                                        'template' => '{view}{update}{delete}',
-                                        'buttons' => array(
-                                            'view' => function($url, $model, $key) {
-                                                return Html::a('<i class="fas fa-eye"></i> View', '', ['class' => 'btn btn-sm btn-primary m-1']);
-                                            },
-                                            'update' => function($url, $model, $key) {
-                                                return Html::a('<i class="fas fa-edit"></i> Update', Url::to(['update', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1']);
-                                            },
-                                            'delete' => function($url, $model, $key) {
-                                                return Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1 delete', 'data-pjax'=>0, 'style'=>'color:#fff', 'data'=>Yii::$app->encryptor->encodeUrl($model->id)]);
-                                            },
-                                        )
-                                    ],
+                            'dataProvider' => $dataProvider,
+                            // 'filterModel' => $searchModel,
+                            'tableOptions' => ['class' => 'table table-striped'],
+                            'summaryOptions' => ['class' => 'badge badge-light m-2'],
+                            'columns' => [
+                                [
+                                    'class' => 'yii\grid\SerialColumn',
+                                    'header' => 'No.'
                                 ],
-                            ]); ?>
+                                [
+                                    'attribute' => 'thumbnail',
+                                    'label' => 'Thumbnail',
+                                    'format' => 'raw',
+                                    'value' => function ($model) {
+                                        return $model->thumbnail ? "<img src='{$model->thumbnail}' class='img-fluid lazy' style='width:68px' alt='thumnail'/>" : "";
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'created_at',
+                                    'label' => 'Tanggal Post',
+                                    'format' => 'raw',
+                                    'value' => function ($model) {
+                                        return $model->created_at ? date('d/m/Y H:i:s', $model->created_at) : "-";
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'title',
+                                    'label' => 'Title',
+                                    'format' => 'raw',
+                                    'value' => function ($model) {
+                                        return $model->title ? "<p>{$model->title}</p><p class='-tw-mt-4 tw-text-xs tw-py-1 tw-px-3 tw-bg-slate-400 tw-rounded-full tw-text-white tw-w-fit'>{$model->category->value_}</p>" : "-";
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'status',
+                                    'label' => 'Status',
+                                    'format' => 'raw',
+                                    'value' => function ($model) {
+                                        return $model->status == 1 ? "<span class='tw-bg-green-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs'>Publish</span>" : "<span class='tw-bg-blue-400 tw-text-xs tw-px-3 tw-py-1 tw-rounded-full tw-text-white'>Draft</span>";
+                                    }
+                                ],
+                                [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'contentOptions' => ['style' => 'width:300px;'],
+                                    'header' => 'Action',
+                                    'visibleButtons' => [
+                                        'update' => true,
+                                        'delete' => true,
+                                        'view' => true,
+                                    ],
+                                    'template' => '{view}{update}{delete}',
+                                    'buttons' => array(
+                                        'view' => function ($url, $model, $key) {
+                                            return Html::a('<i class="fas fa-eye"></i> View', '', ['class' => 'btn btn-sm btn-primary m-1']);
+                                        },
+                                        'update' => function ($url, $model, $key) {
+                                            return Html::a('<i class="fas fa-edit"></i> Update', Url::to(['update', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1']);
+                                        },
+                                        'delete' => function ($url, $model, $key) {
+                                            return Html::button('<i class="fas fa-trash"></i> Delete', ['class' => 'btn btn-sm btn-danger m-1 delete', 'data-pjax' => 0, 'style' => 'color:#fff', 'data' => Yii::$app->encryptor->encodeUrl($model->id)]);
+                                        },
+                                    )
+                                ],
+                            ],
+                        ]); ?>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@ use yii\helpers\Url;
 $this->title = Yii::t('app', 'List of Currencies');
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="index">
     <div class="row">
         <div class="col-12">

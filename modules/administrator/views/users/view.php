@@ -8,15 +8,14 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('app', 'Detail of User');
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="row">
     <div class="col-12 col-lg-8 col-md-8">
         <div class="card">
             <div class="card-header">
                 <h4><?= $this->title ?></h4>
                 <?php $img = $model->image ? $model->image : Yii::$app->homeUrl . "theme/stisla/assets/img/avatar/avatar-1.png"; ?>
-                <img alt='image' src="<?= $img ?>" class='rounded-circle profile-widget-picture card-header-action'
-                    style='width:40px; height:40px'>
+                <img alt='image' src="<?= $img ?>" class='rounded-circle profile-widget-picture card-header-action' style='width:40px; height:40px'>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
