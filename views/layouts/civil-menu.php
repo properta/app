@@ -75,11 +75,11 @@
         <ul class="dropdown-menu">
             <li>
                 <a class="nav-link"
-                    href=<?= Yii::getAlias( '@web/administrator/plot-of-land/create' ) ?>><?= Yii::t('app', 'Add New')?></a>
+                    href=<?= Yii::getAlias( '@web/civil/plot-of-land/create' ) ?>><?= Yii::t('app', 'Add New')?></a>
             </li>
             <li>
                 <a class="nav-link"
-                    href=<?= Yii::getAlias( '@web/administrator/plot-of-land/index' ) ?>><?= Yii::t('app', 'List of Land') ?>
+                    href=<?= Yii::getAlias( '@web/civil/plot-of-land/index' ) ?>><?= Yii::t('app', 'List of Land') ?>
                 </a>
             </li>
         </ul>
