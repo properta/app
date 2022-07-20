@@ -134,7 +134,6 @@ class ProjectsController extends Controller
         if (Yii::$app->user->can('/projects/view') || 1) :
             $code = Yii::$app->encryptor->decodeUrl($code);
             $model = $this->findModel($code);
-            $model->scenario = 'update';
             $msg = "";
             if ($model->load(Yii::$app->request->post())) :
                 Yii::$app->response->format = Response::FORMAT_JSON;
@@ -207,5 +206,25 @@ class ProjectsController extends Controller
         } catch (\Exception $e) {
             Yii::$app->response->statusCode = 500;
         }
+    }
+
+    public function actionGetContractors()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = Contractors::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['status' => 1])
+            ->andWhere(['deleted_at' => NULL])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
     }
 }

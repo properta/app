@@ -5,14 +5,14 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 
-$this->title = Yii::t('app','Detail of Materials');
+$this->title = Yii::t('app', 'Detail of Materials');
 /**
  *
  * @var $model \app\models\mains\generals\Projects
  */
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="row">
     <div class="col-12 col-lg-8 col-md-8">
         <div class="card">
@@ -51,25 +51,25 @@ $this->title = Yii::t('app','Detail of Materials');
                         <tr>
                             <td class="tw-font-bold"><?= $model->getAttributeLabel('created_at') ?></td>
                             <td>:</td>
-                            <td><?= $model->created_at?date("d/m/Y h:m:s" ,$model->created_at):"-" ?></td>
+                            <td><?= $model->created_at ? date("d/m/Y h:m:s", $model->created_at) : "-" ?></td>
                         </tr>
                         <tr>
                             <td class="tw-font-bold"><?= $model->getAttributeLabel('created_by') ?></td>
                             <td>:</td>
-                            <td><?= $model->createdBy->full_name??"-" ?></td>
+                            <td><?= $model->createdBy->full_name ?? "-" ?></td>
                         </tr>
                         <tr>
                             <td class="tw-font-bold"><?= $model->getAttributeLabel('status') ?></td>
                             <td>:</td>
-                            <td><?= $model->status==1 ? "<span class='badge badge-primary'>".Yii::t('app', 'Active')."</span>" : "<span class='badge badge-warning'>".Yii::t('app', 'Inactive')."</span>" ?>
+                            <td><?= $model->status == 1 ? "<span class='badge badge-primary'>" . Yii::t('app', 'Active') . "</span>" : "<span class='badge badge-warning'>" . Yii::t('app', 'Inactive') . "</span>" ?>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="form-group">
-                    <?= Html::a('<i class="fas fa-undo-alt"></i> '.Yii::t('app', 'Back'), 'index', ['class' => 'btn btn-sm btn-info m-11', 'style'=>'color:#fff', 'data-pjax'=>1]);  ?>
-                    <?= Html::a('<i class="fas fa-edit"></i> '.Yii::t('app', 'Update'), Url::to(['update', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1', 'style'=>'color:#fff', 'data-pjax'=>1]);  ?>
-                    <?= Html::button('<i class="fas fa-trash"></i> '.Yii::t('app', 'Delete'), ['class' => 'btn btn-sm btn-danger m-1', 'data-pjax'=>0, 'style'=>'color:#fff', 'id'=>'delete', 'data'=>Yii::$app->encryptor->encodeUrl($model->id), 'data-pjax'=>1]);  ?>
+                    <?= Html::a('<i class="fas fa-undo-alt"></i> ' . Yii::t('app', 'Back'), 'index', ['class' => 'btn btn-sm btn-info m-11', 'style' => 'color:#fff', 'data-pjax' => 1]);  ?>
+                    <?= Html::a('<i class="fas fa-edit"></i> ' . Yii::t('app', 'Update'), Url::to(['update', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-warning m-1', 'style' => 'color:#fff', 'data-pjax' => 1]);  ?>
+                    <?= Html::button('<i class="fas fa-trash"></i> ' . Yii::t('app', 'Delete'), ['class' => 'btn btn-sm btn-danger m-1', 'data-pjax' => 0, 'style' => 'color:#fff', 'id' => 'delete', 'data' => Yii::$app->encryptor->encodeUrl($model->id), 'data-pjax' => 1]);  ?>
                 </div>
             </div>
         </div>

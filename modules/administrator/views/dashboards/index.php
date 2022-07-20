@@ -12,7 +12,7 @@ $this->title = 'List Artikel';
 
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="index">
     <div class="row">
         <div class="col-12">
@@ -22,8 +22,7 @@ $this->title = 'List Artikel';
                 </div>
                 <div class="card-body">
                     SELAMAT DATANG DI APLIKASI SIPIL
-                    <input type="file" class="filepond" name="filepond" multiple data-allow-reorder="true"
-                        data-max-file-size="3MB" data-max-files="3">
+                    <input type="file" class="filepond" name="filepond" multiple data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3">
                 </div>
             </div>
         </div>

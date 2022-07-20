@@ -38,7 +38,7 @@ use app\utils\template\Template;
                 <div class="form">
 
                     <?= $form->field($model, 'contractor_id')
-                        ->dropDownList($contractors, ['class' => 'form-control', 'prompt' => Yii::t('app', '--choose one--')]);
+                        ->dropDownList($contractors, ['class' => 'form-control select2', 'id' => 'contractors', 'prompt' => Yii::t('app', '--choose one--')]);
                     ?>
 
                     <?= $form->field($model, 'area_code', Template::template('fas fa-flag'))->textInput(['maxlength' => true, 'placeholder' => 'PKU001']) ?>
@@ -61,6 +61,20 @@ use app\utils\template\Template;
 <?php
 $js = <<< JS
 function init(){
+
+    $('#contractors').select2({
+        ajax: {
+            url: 'get-contractors',
+            dataType: 'json',
+            data: function (params) {
+                var query = {
+                    search: params.term,
+                }
+                return query;
+            }
+        }
+    });
+
     let hasClick = 0;
     $("body").on("beforeSubmit", "form", function (e) {
         var form = $(this);
@@ -86,7 +100,8 @@ function init(){
                 $.pjax.reload({container: '#p0', timeout: false});
             },
             error  : function (e) {
-                window.location.reload();
+                // window.location.reload();
+                alert(JSON.stringify(e));
             }
         });
         hasClick++;

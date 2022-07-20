@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\{
     Html,
     Url,
@@ -11,13 +12,13 @@ $this->title = 'List Artikel';
 
 ?>
 <?php Pjax::begin(); ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="index">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4> <?=  $this->title ?></h4>
+                    <h4> <?= $this->title ?></h4>
                 </div>
                 <div class="card-body">
                     SELAMAT DATANG DI APLIKASI SIPIL

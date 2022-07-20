@@ -24,7 +24,7 @@ $this->title = 'Data of Companies';
  */
 
 ?>
-<?= $this->render('@app/views/site/_message') ?>
+<?= $this->render('@app/views/message/alert') ?>
 <div class="index">
     <div class="row">
         <div class="col-12">
@@ -42,11 +42,7 @@ $this->title = 'Data of Companies';
                                             <?= $request->name ?? "-" ?>
                                         </div>
                                         <div class="text-small text-muted">
-<<<<<<< HEAD:modules/administrator/views/backup/request-details/index.php
-                                            Request Name
-=======
-                                            <?= $request->name ?? "-" ?>
->>>>>>> 08fb1d189837ba86e276f0309a890b635ffb421b:modules/administrator/views/request-details/index.php
+                                            <<<<<<< HEAD:modules/administrator/views/backup/request-details/index.php Request Name=======<?= $request->name ?? "-" ?>>>>>>>> 08fb1d189837ba86e276f0309a890b635ffb421b:modules/administrator/views/request-details/index.php
                                         </div>
                                     </div>
                                     <div class="media-right">
@@ -110,8 +106,7 @@ $this->title = 'Data of Companies';
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <input type="file" class="fileond" , data-allow-reorder="true" , data-max-file-size="3MB" ,
-                            data-max-files="1" />
+                        <input type="file" class="fileond" , data-allow-reorder="true" , data-max-file-size="3MB" , data-max-files="1" />
                         <button class="btn btn-primary" id="start-import">Import Excel</button>
                     </div>
                 </div>
@@ -143,76 +138,75 @@ $this->title = 'Data of Companies';
                     ]); ?>
                     <?= $form->field($model, 'request_id')->hiddenInput(['value' => $request->id])->label(false) ?>
                     <div class="row">
-<<<<<<< HEAD:modules/administrator/views/backup/request-details/index.php
-                        <div class="col-2">
+                        <<<<<<< HEAD:modules/administrator/views/backup/request-details/index.php <div class="col-2">
                             <?= $form->field($model, 'request_number')->textInput(['maxlength' => true, 'placeholder' => 'Req']) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'joint_number')->textInput(['maxlength' => true, 'placeholder' => 'Joint']) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'drawing_number')->textInput(['maxlength' => true, 'placeholder' => 'Drw']) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'line_number')->textInput([]) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'diameter_str')->textInput([]) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'thickness')->textInput([]) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'material_id')->dropDownList($resources['materials'] ?? [], ['class' => 'select2', 'prompt' => 'Choose Material']) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'method_id')->dropDownList($resources['inspection_methods'] ?? [], ['class' => 'select2', 'prompt' => 'Choose Material']) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'line_class_id')->dropDownList($resources['line_classes'] ?? [], ['class' => 'select2', 'prompt' => 'Choose Material']) ?>
-                        </div>
-                        <div class="col-2">
-                            <?= $form->field($model, 'shop_id')->dropDownList($resources['shoops'] ?? [], ['class' => 'select2', 'prompt' => 'Choose Material']) ?>
-                        </div>
-
-                        <div class="col-2">
-                            <?= $form->field($model, 'remark')->textInput([]) ?>
-                        </div>
-=======
->>>>>>> 08fb1d189837ba86e276f0309a890b635ffb421b:modules/administrator/views/request-details/index.php
-
-
-                        <?php echo $this->render('_form', [
-                                'resources' => $resources
-                        ]) ?>
-
                     </div>
-                    <?php ActiveForm::end(); ?>
+                    <div class="col-2">
+                        <?= $form->field($model, 'joint_number')->textInput(['maxlength' => true, 'placeholder' => 'Joint']) ?>
+                    </div>
+                    <div class="col-2">
+                        <?= $form->field($model, 'drawing_number')->textInput(['maxlength' => true, 'placeholder' => 'Drw']) ?>
+                    </div>
+                    <div class="col-2">
+                        <?= $form->field($model, 'line_number')->textInput([]) ?>
+                    </div>
+                    <div class="col-2">
+                        <?= $form->field($model, 'diameter_str')->textInput([]) ?>
+                    </div>
+                    <div class="col-2">
+                        <?= $form->field($model, 'thickness')->textInput([]) ?>
+                    </div>
+                    <div class="col-2">
+                        <?= $form->field($model, 'material_id')->dropDownList($resources['materials'] ?? [], ['class' => 'select2', 'prompt' => 'Choose Material']) ?>
+                    </div>
+                    <div class="col-2">
+                        <?= $form->field($model, 'method_id')->dropDownList($resources['inspection_methods'] ?? [], ['class' => 'select2', 'prompt' => 'Choose Material']) ?>
+                    </div>
+                    <div class="col-2">
+                        <?= $form->field($model, 'line_class_id')->dropDownList($resources['line_classes'] ?? [], ['class' => 'select2', 'prompt' => 'Choose Material']) ?>
+                    </div>
+                    <div class="col-2">
+                        <?= $form->field($model, 'shop_id')->dropDownList($resources['shoops'] ?? [], ['class' => 'select2', 'prompt' => 'Choose Material']) ?>
+                    </div>
+
+                    <div class="col-2">
+                        <?= $form->field($model, 'remark')->textInput([]) ?>
+                    </div>
+                    =======
+                    >>>>>>> 08fb1d189837ba86e276f0309a890b635ffb421b:modules/administrator/views/request-details/index.php
+
+
+                    <?php echo $this->render('_form', [
+                        'resources' => $resources
+                    ]) ?>
+
                 </div>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-12">
-            <h2 class="section-title">List Detail</h2>
-            <p class="section-lead">
-                Desc here....
-            </p>
+<div class="row">
+    <div class="col-12">
+        <h2 class="section-title">List Detail</h2>
+        <p class="section-lead">
+            Desc here....
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <?php Pjax::begin(); ?>
+            <?= $this->render('_table_detail', [
+                'request_details' => $request_details,
+            ]) ?>
+            <?php Pjax::end(); ?>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <?php Pjax::begin(); ?>
-                <?= $this->render('_table_detail', [
-                    'request_details' => $request_details,
-                ]) ?>
-                <?php Pjax::end(); ?>
-            </div>
-        </div>
-    </div>
+</div>
 
 </div>
 

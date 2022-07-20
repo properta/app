@@ -148,17 +148,11 @@ class UsersController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         if (Yii::$app->user->can('/users/delete') || 1) :
-            $code  = Yii::$app->encryptor->decodeUrl(Yii::$app->request->post('code'));
+            $code = Yii::$app->encryptor->decodeUrl(Yii::$app->request->post('code'));
             $model = $this->findModel($code);
-            $model->scenario = 'delete';
-            if ($model) :
-                $msg = Yii::t("app", "Data berhasil di hapus");
-                Yii::$app->session->setFlash('success', $msg);
-                $model->save(false);
+            if ($model->delete()) :
                 return ['status' => 1];
             endif;
-            $msg = Yii::t("app", "Data gagal di hapus");
-            Yii::$app->session->setFlash('danger', $msg);
             return ['status' => -1];
         endif;
         return ['status' => -99];
