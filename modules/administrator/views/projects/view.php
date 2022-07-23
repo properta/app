@@ -78,7 +78,20 @@ $this->title = Yii::t('app', 'Detail of Project');
                             <tr>
                                 <td class="tw-font-bold"><?= $model->getAttributeLabel('status') ?></strong></td>
                                 <td>:</td>
-                                <td><?= $model->status == 10 ? "<span class='badge badge-primary'>" . Yii::t('app', 'Active') . "</span>" : "<span class='badge badge-warning'>" . Yii::t('app', 'Inactive') . "</span>" ?>
+                                <td>
+                                    <?php
+                                    switch ($model->status):
+                                        case 1:
+                                            echo "<span class='tw-bg-blue-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs tw-whitespace-nowrap'>" . Yii::t('app', 'aktif') . "</span>";
+                                            break;
+                                        case 0:
+                                            echo "<span class='tw-bg-red-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs tw-whitespace-nowrap'>" . Yii::t('app', 'tidak aktif') . "</span>";
+                                            break;
+                                        default:
+                                            echo "<span class='tw-bg-yellow-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs tw-whitespace-nowrap'>" . Yii::t('app', 'lainnya') . "</span>";
+                                            break;
+                                    endswitch;
+                                    ?>
                                 </td>
                             </tr>
                         </table>

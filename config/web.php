@@ -34,6 +34,9 @@ $config = [
             'identityClass' => 'app\models\identities\Users',
             'enableAutoLogin' => true,
         ],
+        'helper' => [
+            'class' => \app\utils\helper\Helper::class
+        ],
         'encryptor' => [
             'class' => \app\utils\encrypt\Encryptor::class
         ],
@@ -74,8 +77,7 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'rules' => [],
         ],
     ],
     'params' => $params,

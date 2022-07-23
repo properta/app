@@ -14,7 +14,7 @@ $this->title = Yii::t('app', 'List of Projects');
     <div class="row">
         <div class="col-12">
             <p>
-                <?= Html::a('<i class="fa fa-plus"></i> ' . Yii::t('app', 'Project'), ['create'], ['class' => 'btn btn-info m-1']) ?>
+                <?= Html::a('<i class="fa fa-plus"></i> ' . Yii::t('app', 'Wupa'), ['create'], ['class' => 'btn btn-info m-1']) ?>
             </p>
             <div class="card">
                 <div class="card-header">
@@ -36,14 +36,6 @@ $this->title = Yii::t('app', 'List of Projects');
                                     'header' => 'No.'
                                 ],
                                 [
-                                    'attribute' => 'code',
-                                    // 'label' => Yii::t('app', 'Code'),
-                                    'format' => 'raw',
-                                    'value' => function ($model) {
-                                        return $model->code ?? "-";
-                                    }
-                                ],
-                                [
                                     'attribute' => 'title',
                                     // 'label' => Yii::t('app', 'Title'),
                                     'format' => 'raw',
@@ -52,19 +44,21 @@ $this->title = Yii::t('app', 'List of Projects');
                                     }
                                 ],
                                 [
-                                    'attribute' => 'building_permit_number',
-                                    // 'label' => 'Yii::t('app', 'building_permit_number'),
+                                    'attribute' => 'status',
+                                    'label' => Yii::t('app', 'Status'),
                                     'format' => 'raw',
                                     'value' => function ($model) {
-                                        return $model->building_permit_number ?? "-";
-                                    }
-                                ],
-                                [
-                                    'attribute' => 'area_code',
-                                    // 'label' => 'Yii::t('app', 'area_code'),
-                                    'format' => 'raw',
-                                    'value' => function ($model) {
-                                        return $model->area_code ?? "-";
+                                        switch ($model->status):
+                                            case 1:
+                                                return "<span class='tw-bg-blue-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs tw-whitespace-nowrap'>" . Yii::t('app', 'aktif') . "</span>";
+                                                break;
+                                            case 0:
+                                                return "<span class='tw-bg-red-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs tw-whitespace-nowrap'>" . Yii::t('app', 'tidak aktif') . "</span>";
+                                                break;
+                                            default:
+                                                return "<span class='tw-bg-yellow-400 tw-px-3 tw-py-1 tw-rounded-full tw-text-white tw-text-xs tw-whitespace-nowrap'>" . Yii::t('app', 'lainnya') . "</span>";
+                                                break;
+                                        endswitch;
                                     }
                                 ],
                                 [

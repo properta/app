@@ -15,9 +15,9 @@ use yii\filters\{
     VerbFilter
 };
 use app\models\mains\{
-    generals\Projects,
+    generals\WupaMasters,
     generals\Contractors,
-    searches\Projects as ProjectsSearch
+    searches\WupaMasters as ProjectsSearch
 };
 use app\utils\{
     gdrive\GDrive
@@ -73,10 +73,11 @@ class WupaController extends Controller
     public function actionCreate()
     {
         if (Yii::$app->user->can('/wupa/create') || 1) :
-            $model = new Projects();
+            $model = new WupaMasters();
             $msg = "";
             if ($model->load(Yii::$app->request->post())) :
                 Yii::$app->response->format = Response::FORMAT_JSON;
+                $model->code = Yii::$app->helper->generateCode(6, new WupaMasters, 'code');
                 if ($model->save()) :
                     $msg = Yii::t("app", "Data berhasil di tambah");
                     Yii::$app->session->setFlash('success', $msg);
@@ -105,10 +106,10 @@ class WupaController extends Controller
 
     public function actionValidate($code = '')
     {
-        $model = new Projects();
+        $model = new WupaMasters();
         if ($code) :
             $code = Yii::$app->encryptor->decodeUrl($code);
-            $model = Projects::findOne($code);
+            $model = WupaMasters::findOne($code);
         endif;
         if ($model->load(Yii::$app->request->post())) :
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -122,7 +123,28 @@ class WupaController extends Controller
         if (Yii::$app->user->can('/wupa/view') || 1) :
             $code = Yii::$app->encryptor->decodeUrl($code);
             $model = $this->findModel($code);
+
+            $searchModel = new ProjectsSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query
+                ->andWhere(['deleted_at' => NULL])
+                ->orderBy(['id' => SORT_DESC]);
+
             return $this->render('view', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        endif;
+        throw new ForbiddenHttpException("You Can't Access This Page");
+    }
+
+    public function actionCoe($code)
+    {
+        if (Yii::$app->user->can('/wupa/coe') || 1) :
+            $code = Yii::$app->encryptor->decodeUrl($code);
+            $model = $this->findModel($code);
+            return $this->render('coe', [
                 'model' => $model
             ]);
         endif;
@@ -148,14 +170,7 @@ class WupaController extends Controller
                 return ['status' => 0, 'msg' => $msg];
             endif;
             return $this->render('update', [
-                'model' => $model,
-                'contractors' => ArrayHelper::map(
-                    Contractors::find()
-                        ->andWhere(['id' => $model->contractor_id])
-                        ->all(),
-                    'id',
-                    'title'
-                )
+                'model' => $model
             ]);
         endif;
         throw new ForbiddenHttpException("You Can't Access This Page");
@@ -177,7 +192,7 @@ class WupaController extends Controller
 
     protected function findModel($id)
     {
-        $model = Projects::find()->where(['id' => $id])
+        $model = WupaMasters::find()->where(['id' => $id])
             ->andWhere(['deleted_at' => NULL])
             ->one();
         if ($model !== null) :
