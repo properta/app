@@ -151,8 +151,7 @@ class WupaController extends Controller
                 'model' => $model,
                 'contractors' => ArrayHelper::map(
                     Contractors::find()
-                        ->where(['status' => 1])
-                        ->andWhere(['deleted_at' => NULL])
+                        ->andWhere(['id' => $model->contractor_id])
                         ->all(),
                     'id',
                     'title'
