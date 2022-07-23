@@ -153,7 +153,7 @@ class SiteController extends Controller
         $term = Yii::$app->request->get('search') ?? "";
 
         $model = Projects::find()
-            ->where(['like', 'name', $term])
+            ->where(['like', 'title', $term])
             ->andWhere(['status' => 1])
             ->andWhere(['deleted_at' => NULL])
             ->limit(10)
@@ -162,7 +162,7 @@ class SiteController extends Controller
         foreach ($model as $key => $value) {
             $data[] = [
                 'id' => $value->id,
-                'text' => $value->name
+                'text' => $value->title
             ];
         }
         return json_encode(['results' => $data]);
@@ -170,64 +170,14 @@ class SiteController extends Controller
 
     public function actionSetProjects()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         if (Yii::$app->request->isAjax) {
             $id = Yii::$app->request->post('id');
             $text = Yii::$app->request->post('text');
-            $session = Yii::$app->session;
-            $session->remove('id');
-            $session->remove('text');
-            $session->set('id', $id);
-            $session->set('text', $text);
-            return 1;
+            return Yii::$app->helper->setProject($id, $text);
         } else {
             return 0;
         }
-    }
-
-    public function actionSignature()
-    {
-        if (!Yii::$app->request->isAjax) {
-            $id_user = 1;
-            $id_request = 1;
-            return $this->renderPartial('signature', [
-                'id_user' => $id_user,
-                'id_request' => $id_request
-            ]);
-        }
-        // SAVE TO DB
-        if (!empty($_POST['data'])) {
-            $img = str_replace(' ', '+', str_replace('data:image/png;base64,', '', $_POST['data']));
-            $data = base64_decode($img);
-            $file = "signature/" . uniqid() . '.png';
-            if (file_put_contents($file, $data)) {
-                return 1;
-            }
-        }
-        return 0;
-    }
-
-    protected function base64ToImage($base64, $img_file)
-    {
-
-        // Obtain the original content (usually binary data)
-        $bin = base64_decode($base64);
-
-        // Load GD resource from binary data
-        $im = imageCreateFromString($bin);
-
-        // Make sure that the GD library was able to load the image
-        // This is important, because you should not miss corrupted or unsupported images
-        if (!$im) {
-            die('Base64 value is not a valid image');
-        }
-
-        // Specify the location where you want to save the image
-        $img_file = '/files/images/filename.png';
-
-        // Save the GD resource as PNG in the best possible quality (no compression)
-        // This will strip any metadata or invalid contents (including, the PHP backdoor)
-        // To block any possible exploits, consider increasing the compression level
-        return imagepng($im, $img_file, 0);
     }
 
     /**

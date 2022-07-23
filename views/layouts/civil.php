@@ -2,6 +2,7 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+
 use app\assets\StislaAsset;
 use yii\bootstrap4\Html;
 use app\utils\breadcrumb\Breadcrumb as BC;
@@ -39,11 +40,11 @@ $breadcrumb = BC::generateBreadcrumbs($router, "breadcrumb-item");
                     </ul>
                     <div class="form-group col-6">
                         <select class="form-control select2 get-projects">
-                            <?php if(Yii::$app->session->get('id')): ?>
+                            <?php if (Yii::$app->session->get('id')) : ?>
                             <option selected value="<?= Yii::$app->session->get('id') ?>">
                                 <?= Yii::$app->session->get('text') ?>
                             </option>
-                            <?php else: ?>
+                            <?php else : ?>
                             <option>--Choose Projects--</option>
                             <?php endif; ?>
                         </select>
@@ -53,10 +54,10 @@ $breadcrumb = BC::generateBreadcrumbs($router, "breadcrumb-item");
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image"
-                                src="<?= Yii::$app->user->identity->image??Yii::$app->homeUrl."theme/stisla/assets/img/avatar/avatar-1.png" ?>"
+                                src="<?= Yii::$app->user->identity->image ?? Yii::$app->homeUrl . "theme/stisla/assets/img/avatar/avatar-1.png" ?>"
                                 class="rounded-circle profile-widget-picture mt-n3" style="width:32px; height:32px">
                             <div class="d-sm-none d-lg-inline-block">Hi,
-                                <?= Yii::$app->user->identity->full_name??"Annonym" ?></div>
+                                <?= Yii::$app->user->identity->full_name ?? "Annonym" ?></div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="<?= \yii\helpers\Url::to('administrator/profiles/me', true) ?>"
@@ -95,7 +96,8 @@ $breadcrumb = BC::generateBreadcrumbs($router, "breadcrumb-item");
                 <section class="section">
                     <!-- breadcrumb -->
                     <div class="section-header">
-                        <h1><?= $this->context->title?$this->context->title:ucfirst(Yii::$app->controller->id) ?></h1>
+                        <h1><?= $this->context->title ? $this->context->title : ucfirst(Yii::$app->controller->id) ?>
+                        </h1>
                         <div class='section-header-breadcrumb'>
                             <?= $breadcrumb ?>
                         </div>
@@ -121,178 +123,21 @@ $breadcrumb = BC::generateBreadcrumbs($router, "breadcrumb-item");
     </div>
     <?php $this->endBody() ?>
     <?php
-        Modal::begin([
-            'title' => '<span id="modalTitle">Modal</span>',
-            'centerVertical' => true,
-            'id'=>'modal',
-            'size' => 'modal-lg',
-            'scrollable' => true,
-        ]);
+    Modal::begin([
+        'title' => '<span id="modalTitle">Modal</span>',
+        'centerVertical' => true,
+        'id' => 'modal',
+        'size' => 'modal-lg',
+        'scrollable' => true,
+    ]);
 
-        echo '<div id="modalContent"></div>';
+    echo '<div id="modalContent"></div>';
 
-        Modal::end();
+    Modal::end();
     ?>
 </body>
 
-<?php
-$homeUrl = Yii::$app->homeUrl;
-$mod = Yii::$app->controller->module->id;
-$con = Yii::$app->controller->id;
-
-$csrf = Yii::$app->request->getCsrfToken();
-$js = <<< JS
-$('document').ready(()=>{  
-    var showNotif = 0;
-
-    $('a').click((e)=>{
-        if(!window.navigator.onLine){
-            e.preventDefault();
-            return false;
-        }
-        return true;
-    })
-
-    $('button').click((e)=>{
-        if(!window.navigator.onLine){
-            e.preventDefault();
-            return false;
-        }
-        return true;
-    })
-
-    setInterval(function(){
-        if(!window.navigator.onLine){
-            if(showNotif==0){
-                swal({
-                    html:'<div>'+
-                    '<img src="'+baseUrl+'icons/no-network.svg" />'+
-                    '<p style="margin-bottom:0px;">Your Connection is Down!</p>'+
-                    '<small>If you are in a form, please wait till connection back for safe the data!</small>'+
-                    '</div>',
-                    showCloseButton: true,
-                    showCancelButton: false,
-                    focusConfirm: false,
-                    confirmButtonText: 'Understood!',
-                    confirmButtonAriaLabel: 'Thumbs up, great!',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    allowEnterKey: false,
-                    showCancelButton: false
-                }).then(function (){
-                    if(!window.navigator.onLine){
-                        $.notify("Oups, your connection still down!", 'error')
-                    }
-                    else{
-                        $.notify("Yey, your connection is back!", 'success')
-                    }
-                    showNotif = 0;
-                })
-                $('.swal2-close').hide();
-                showNotif = 1;
-            }
-        }
-        else{
-            if(showNotif==1){
-                $('.swal2-confirm').trigger('click');
-            }
-        }
-    }, 1000);
-
-    let start = '';
-    let isInterval = '';
-    $(document).on('pjax:beforeSend', function(){
-        start = Date.now();
-    });
-    $(document).on('pjax:send', function(){
-        isInterval = setInterval(function(){
-            let now = Date.now();
-            if((now - start) >=1500){
-                $.notify('Still working...', { 
-                    className: 'info',
-                    autoHide: false,
-                    clickToHide: false
-                });
-                clearInterval(isInterval)
-            }
-        },50)
-    });
-    $(document).on('pjax:success', function(){
-        $('.notifyjs-wrapper').trigger('notify-hide');
-        clearInterval(isInterval)
-
-    });
-    $(document).on('pjax:error', function(){
-        $('.notifyjs-wrapper').trigger('notify-hide');
-        clearInterval(isInterval)
-    });
-    $(document).on('pjax:popstate', function(){
-        document.referrer;
-    });
-
-    $('.get-projects').select2({
-        ajax: {
-            url: '$homeUrl'+'site/get-projects',
-            dataType: 'json',
-            data: function (params) {
-                var query = {
-                    search: params.term
-                }
-                return query;
-            }
-        }
-    });
-
-    $('.get-projects').on('select2:select', function (e) {
-        let id = $('.get-projects').val();
-        let text = $('.get-projects').select2('data')[0]['text'];
-        $.ajax({
-            url: baseUrl+'site/set-projects',
-            type: 'POST',
-            data: {
-                id: id,
-                text: text,
-                _csrf: _csrf
-            },
-            success:function(res){
-                if(res){
-                    swal(
-                        'Success',
-                        'Berhasil Memilih Sekolah!',
-                        'success'
-                    ).then((e)=>{
-                        location.reload();
-                    });
-                }else{
-                    swal(
-                        'Error',
-                        'Gagal Memilih Sekolah!',
-                        'error'
-                    );
-                }
-            }
-        })
-    });
-});
-JS;
-$this->registerJs($js);
-$this->registerJsVar('baseUrl', Yii::$app->homeUrl);
-$this->registerJsVar('module', Yii::$app->controller->module->id);
-$this->registerJsVar('controller', Yii::$app->controller->id);
-$this->registerJsVar('_csrf', Yii::$app->request->csrfToken);
-$this->registerJsVar('messageConfirmDelete', Yii::t('app','Are you sure?'));
-$this->registerJsVar('textConfirmDelete', Yii::t('app',"You won't be able to revert this!"));
-$this->registerJsVar('textDelete', Yii::t('app','Yes, delete it!'));
-$this->registerJsVar('textCancle', Yii::t('app','No, cancel!'));
-$this->registerJsVar('messageSuccess', Yii::t('app','Success'));
-$this->registerJsVar('messageFailed', Yii::t('app','Failed'));
-$this->registerJsVar('messageAnauthorized', Yii::t('app','Anauthorized'));
-$this->registerJsVar('messageCanceled', Yii::t('app','Canceled'));
-$this->registerJsVar('textSuccess', Yii::t('app','Deleted Successfully!'));
-$this->registerJsVar('textFailed', Yii::t('app','Data is Not Deleted!'));
-$this->registerJsVar('textAnauthorized', Yii::t('app',"You Can't Delete this Data!"));
-$this->registerJsVar('textCanceled', Yii::t('app',"Your imaginary file is safe :)"));
-?>
+<?= $this->render('js'); ?>
 
 </html>
 <?php $this->endPage() ?>

@@ -3,9 +3,18 @@
 namespace app\utils\helper;
 
 use Yii;
+use app\models\mains\{
+    generals\Projects,
+};
 
 class Helper
 {
+    public $activeProject;
+
+    function __construct()
+    {
+        $this->activeProject = $this->activeProject();
+    }
 
     static function in_arrays($needles = [], $haystack = []): bool
     {
@@ -93,5 +102,33 @@ class Helper
         else :
             return $this->generateCode($length, $model, $field);
         endif;
+    }
+
+    public function setProject($id, $text)
+    {
+        try {
+            $session = Yii::$app->session;
+            $session->remove('id');
+            $session->remove('text');
+            $session->set('id', $id);
+            $session->set('text', $text);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function activeProject($all = false)
+    {
+        if ($id = Yii::$app->session->get('id')) :
+            $model = Projects::findOne($id);
+            if ($model) :
+                if ($all) :
+                    return $model;
+                endif;
+                return $model->id;
+            endif;
+        endif;
+        return false;
     }
 }
