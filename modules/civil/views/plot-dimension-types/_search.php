@@ -9,20 +9,19 @@ use yii\widgets\ActiveForm;
     'id' => 'filter',
     'method' => 'get',
     'options' => [
-        'data-pjax' => true
+        'data-pjax' => 1
     ],
 ]); ?>
 
 <div class="input-group">
-    <?= $form->field($model, 'query', ['options' => ['tag' => false], 'errorOptions' => ['tag' => false]])->textInput(['placeholder' => Yii::t('app','Search')])->label(false) ?>
+    <?= $form->field($model, 'query', ['options' => ['tag' => false], 'errorOptions' => ['tag' => false]])->textInput(['placeholder' => Yii::t('app', 'Search')])->label(false) ?>
 
     <div class="input-group-btn">
-        <?= Html::submitButton('<i class="fas fa-search"></i>', ['class' => 'btn btn-primary btn-lg']) ?>
+        <?= Html::submitButton('<i class="fas fa-search"></i>', ['class' => 'btn btn-primary']) ?>
     </div>
 
 </div>
 <?php ActiveForm::end(); ?>
-
 <?php
 $js = <<< JS
 $("body").on("beforeSubmit", "form#filter", function (e) {

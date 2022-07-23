@@ -38,7 +38,7 @@ use app\utils\template\Template;
                 <div class="form">
 
                     <?= $form->field($model, 'contractor_id')
-                        ->dropDownList($contractors, ['class' => 'form-control select2', 'id' => 'contractors', 'prompt' => Yii::t('app', '--choose one--')]);
+                        ->dropDownList($contractors??[], ['class' => 'form-control select2', 'id' => 'contractors', 'prompt' => Yii::t('app', '--choose one--')]);
                     ?>
 
                     <?= $form->field($model, 'area_code', Template::template('fas fa-flag'))->textInput(['maxlength' => true, 'placeholder' => 'PKU001']) ?>

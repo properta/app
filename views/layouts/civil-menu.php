@@ -15,11 +15,11 @@
         <ul class="dropdown-menu">
             <li>
                 <a class="nav-link"
-                    href=<?= Yii::getAlias( '@web/administrator/plot-of-land/create' ) ?>><?= Yii::t('app', 'Add New')?></a>
+                    href=<?= Yii::getAlias( '@web/civil/plot-dimension-types/create' ) ?>><?= Yii::t('app', 'Add New')?></a>
             </li>
             <li>
                 <a class="nav-link"
-                    href=<?= Yii::getAlias( '@web/administrator/plot-of-land/index' ) ?>><?= Yii::t('app', 'List of Land') ?>
+                    href=<?= Yii::getAlias( '@web/civil/plot-dimension-types/index' ) ?>><?= Yii::t('app', 'List of Land') ?>
                 </a>
             </li>
         </ul>
@@ -71,15 +71,30 @@
     </li>
     <li class="nav-item">
         <a href="#" class="nav-link has-dropdown"><i
-                class="fas fa-file"></i><span><?= Yii::t('app', 'Plot Land')?></span></a>
+                class="fas fa-file"></i><span><?= Yii::t('app', 'Plot Diminsion Type')?></span></a>
         <ul class="dropdown-menu">
             <li>
                 <a class="nav-link"
-                    href=<?= Yii::getAlias( '@web/civil/plot-of-land/create' ) ?>><?= Yii::t('app', 'Add New')?></a>
+                    href=<?= Yii::getAlias( '@web/civil/plot-dimension-types/create' ) ?>><?= Yii::t('app', 'Add New')?></a>
             </li>
             <li>
                 <a class="nav-link"
-                    href=<?= Yii::getAlias( '@web/civil/plot-of-land/index' ) ?>><?= Yii::t('app', 'List of Land') ?>
+                    href=<?= Yii::getAlias( '@web/civil/plot-dimension-types/index' ) ?>><?= Yii::t('app', 'List of Land') ?>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link has-dropdown"><i
+                class="fas fa-file"></i><span><?= Yii::t('app', 'Plot Of Land')?></span></a>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="nav-link"
+                    href=<?= Yii::getAlias( '@web/civil/plot-of-lands/create' ) ?>><?= Yii::t('app', 'Add New')?></a>
+            </li>
+            <li>
+                <a class="nav-link"
+                    href=<?= Yii::getAlias( '@web/civil/plot-of-lands/index' ) ?>><?= Yii::t('app', 'List of Land') ?>
                 </a>
             </li>
         </ul>

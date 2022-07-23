@@ -23,7 +23,7 @@ use app\models\identities\Users;
  * @property int|null $total
  * @property int $status
  * @property int|null $created_at
- * @property int|null $creatad_by
+ * @property int|null $created_by
  * @property int|null $updated_at
  * @property int|null $updated_by
  * @property int|null $deleted_at
@@ -60,13 +60,13 @@ class PlotDimensionTypes extends \yii\db\ActiveRecord
     {
         return [
             [['desc'], 'string'],
-            [['project_id', 'dimension_unit_code_id', 'plot_type_id', 'total', 'status', 'created_at', 'creatad_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
+            [['project_id', 'dimension_unit_code_id', 'plot_type_id', 'total', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
             [['length', 'width'], 'number'],
             [['code'], 'string', 'max' => 15],
             [['title'], 'string', 'max' => 255],
             [['dimension_unit_code_id_str', 'plot_type_str'], 'string', 'max' => 100],
             ['created_by', 'default', 'value'=>Yii::$app->user->id],
-            [['creatad_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['creatad_by' => 'id']],
+            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['deleted_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['deleted_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['dimension_unit_code_id'], 'exist', 'skipOnError' => true, 'targetClass' => MUnitCodes::className(), 'targetAttribute' => ['dimension_unit_code_id' => 'id']],
@@ -95,7 +95,7 @@ class PlotDimensionTypes extends \yii\db\ActiveRecord
             'total' => Yii::t('app', 'Total'),
             'status' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created At'),
-            'creatad_by' => Yii::t('app', 'Creatad By'),
+            'created_by' => Yii::t('app', 'Creatad By'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'updated_by' => Yii::t('app', 'Updated By'),
             'deleted_at' => Yii::t('app', 'Deleted At'),
@@ -108,9 +108,9 @@ class PlotDimensionTypes extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCreatadBy()
+    public function getCreatedBy()
     {
-        return $this->hasOne(Users::className(), ['id' => 'creatad_by']);
+        return $this->hasOne(Users::className(), ['id' => 'created_by']);
     }
 
     /**

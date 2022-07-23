@@ -5,7 +5,8 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'List of Materials');
+$this->title = Yii::t('app', 'List of Plot Of Lands');
+
 ?>
 <?php Pjax::begin(); ?>
 <?= $this->render('@app/views/message/alert') ?>
@@ -13,7 +14,7 @@ $this->title = Yii::t('app', 'List of Materials');
     <div class="row">
         <div class="col-12">
             <p>
-                <?= Html::a('<i class="fa fa-plus"></i> ' . Yii::t('app', 'Materials'), ['create'], ['class' => 'btn btn-info m-1', 'id' => 'modalCreate']) ?>
+                <?= Html::a('<i class="fa fa-plus"></i> ' . Yii::t('app', 'Plot Dimension Types'), ['create'], ['class' => 'btn btn-info m-1']) ?>
             </p>
             <div class="card">
                 <div class="card-header">
@@ -36,7 +37,7 @@ $this->title = Yii::t('app', 'List of Materials');
                                 ],
                                 [
                                     'attribute' => 'code',
-                                    // 'label' => Yii::t('app','Code'),
+                                    // 'label' => Yii::t('app', 'Code'),
                                     'format' => 'raw',
                                     'value' => function ($model) {
                                         return $model->code ?? "-";
@@ -44,10 +45,18 @@ $this->title = Yii::t('app', 'List of Materials');
                                 ],
                                 [
                                     'attribute' => 'title',
-                                    'label' => Yii::t('app', 'Country'),
+                                    // 'label' => Yii::t('app', 'Title'),
                                     'format' => 'raw',
                                     'value' => function ($model) {
                                         return $model->title ?? "-";
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'building_permit_number',
+                                    // 'label' => 'Yii::t('app', 'building_permit_number'),
+                                    'format' => 'raw',
+                                    'value' => function ($model) {
+                                        return $model->description ?? "-";
                                     }
                                 ],
                                 [
@@ -63,7 +72,7 @@ $this->title = Yii::t('app', 'List of Materials');
                                     'buttons' => array(
                                         'view' => function ($url, $model, $key) {
                                             $url = Url::to(['view', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]);
-                                            return Html::a('<i class="fa fa-file"></i> ' . Yii::t('app', 'Detail'), $url, ['class' => 'btn btn-sm btn-icon btn-primary m-1']);
+                                            return Html::a('<i class="fa fa-file"></i> ' . Yii::t('app', 'detail'), $url, ['data-pjax' => 1, 'class' => 'btn btn-sm btn-icon btn-primary m-1']);
                                         },
                                     )
                                 ],
@@ -75,19 +84,11 @@ $this->title = Yii::t('app', 'List of Materials');
         </div>
     </div>
 </div>
-
 <?php
-$this->registerJsVar('title', Yii::t('app', 'Add Materials'));
 $js = <<< JS
-    $('#modalCreate').click(function (e){
-        $('#modalTitle').html(title)
-        e.preventDefault();
-        let url = $(this).attr('href');
-        $.get(url, function(data) {
-            $('#modal').modal('show').find('#modalContent').html(data)
-        });
-        return false;
-    });
+$(document).on('pjax:popstate', function(){
+    $.pjax.reload({container: '#p0', timeout: false});
+});
 JS;
 $this->registerJs($js);
 ?>

@@ -19,7 +19,7 @@ class PlotDimensionTypes extends PlotDimensionTypesModel
     public function rules()
     {
         return [
-            [['id', 'project_id', 'dimension_unit_code_id', 'plot_type_id', 'total', 'status', 'created_at', 'creatad_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
+            [['id', 'project_id', 'dimension_unit_code_id', 'plot_type_id', 'total', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
             [['code', 'title', 'desc', 'dimension_unit_code_id_str', 'plot_type_str'], 'safe'],
             [['length', 'width'], 'number'],
             ['query', 'safe']
@@ -72,7 +72,7 @@ class PlotDimensionTypes extends PlotDimensionTypesModel
             'total' => $this->total,
             'status' => $this->status,
             'created_at' => $this->created_at,
-            'creatad_by' => $this->creatad_by,
+            'created_by' => $this->created_by,
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
             'deleted_at' => $this->deleted_at,
