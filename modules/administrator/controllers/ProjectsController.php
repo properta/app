@@ -227,4 +227,23 @@ class ProjectsController extends Controller
         });
         return ['results' => $data ?? []];
     }
+
+    public function actionGetProjects()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = Projects::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['deleted_at' => NULL])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->code.' | '.$data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
+    }
 }

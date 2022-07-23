@@ -40,7 +40,7 @@ class UnitCodesController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['index', 'view', 'create', 'update', 'delete', 'validate', 'handle-file'],
+                            'actions' => ['index', 'view', 'create', 'update', 'delete', 'validate', 'handle-file', 'get-unit-codes'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
@@ -206,5 +206,24 @@ class UnitCodesController extends Controller
         } catch (Exception $e) {
             Yii::$app->response->statusCode = 500;
         }
+    }
+
+    public function actionGetUnitCodes()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = MUnitCodes::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['deleted_at' => NULL])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->title.' | '.$data->code,
+            ];
+        });
+        return ['results' => $data ?? []];
     }
 }
