@@ -24,6 +24,16 @@ $this->registerJsVar('textCanceled', Yii::t('app', "Tidak ada tindakan lanjutan"
 $this->registerJsVar('projectSelected', Yii::t('app', "Berhasil memilih proyek"));
 $this->registerJsVar('projectSelectFailed', Yii::t('app', "Gagal memilih proyek"));
 
+$jsHead = <<< JS
+function enterSubmit(selector='.btn-submit'){
+    $("body").bind('keypress', function(e) {
+        if(e.which === 13) {
+            $(selector).click();
+        }
+    });
+}
+JS;
+$this->registerJs($jsHead, \yii\web\View::POS_HEAD);
 
 $js = <<< JS
 var showNotif = 0;

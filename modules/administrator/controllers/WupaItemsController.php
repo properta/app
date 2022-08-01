@@ -12,17 +12,13 @@ use yii\web\{
     UploadedFile
 };
 use yii\filters\{
-    VerbFilter,
-    AccessControl
+    VerbFilter
 };
 use app\models\mains\{
-    generals\MCurrencies,
-    generals\Settings,
-    searches\MCurrencies as MCurrenciesSearch
-};
-use app\models\smart\{
-    generals\MTahunAjaran,
-    generals\PublicSekolah,
+    generals\MWupaItems,
+    generals\MUnitCodes,
+    generals\Contractors,
+    searches\MWupaItems as MWupaItemsSearch
 };
 use app\utils\{
     gdrive\GDrive
@@ -30,9 +26,9 @@ use app\utils\{
 
 use yii\widgets\ActiveForm;
 
-class CurrenciesController extends Controller
+class WupaItemsController extends Controller
 {
-    public $title = "Master Mata Uang";
+    public $title = "MWupaItems";
     public $layout = '@app/views/layouts/administrator';
 
     public function behaviors()
@@ -40,16 +36,6 @@ class CurrenciesController extends Controller
         return array_merge(
             parent::behaviors(),
             [
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'rules' => [
-                        [
-                            'actions' => ['index', 'view', 'create', 'update', 'delete', 'validate', 'handle-file'],
-                            'allow' => true,
-                            'roles' => ['@'],
-                        ],
-                    ],
-                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -70,10 +56,11 @@ class CurrenciesController extends Controller
 
     public function actionIndex()
     {
-        if (Yii::$app->user->can('/currencies/index') || 1) :
-            $searchModel = new MCurrenciesSearch();
+        if (Yii::$app->user->can('/MWupaItems/index') || 1) :
+            $searchModel = new MWupaItemsSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query
+                ->andWhere(['level' => 2])
                 ->andWhere(['deleted_at' => NULL])
                 ->orderBy(['id' => SORT_DESC]);
             return $this->render('index', [
@@ -87,12 +74,17 @@ class CurrenciesController extends Controller
 
     public function actionCreate()
     {
-        if (Yii::$app->user->can('/currencies/create') || 1) :
-            $model = new MCurrencies();
+        if (!Yii::$app->request->isAjax) :
+            return $this->redirect('index');
+        endif;
+        if (Yii::$app->user->can('/MWupaItems/create') || 1) :
+            $model = new MWupaItems();
+            $model->scenario = "wupa-category";
             $msg = "";
             if ($model->load(Yii::$app->request->post())) :
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 if ($model->save()) :
-                    $msg = "Data berhasil di tambah";
+                    $msg = Yii::t("app", "Data berhasil di tambah");
                     Yii::$app->session->setFlash('success', $msg);
                     Yii::$app->response->format = Response::FORMAT_JSON;
                     return ['status' => 1, 'id' => Yii::$app->encryptor->encodeUrl($model->id), 'from' => 'create', 'type' => null, 'msg' => $msg];
@@ -100,9 +92,10 @@ class CurrenciesController extends Controller
                 $err = $model->getErrors();
                 $msg = $err[key($err)][0];
                 Yii::$app->session->setFlash('danger', $msg);
+                return ['status' => 0, 'msg' => $msg];
             endif;
             return $this->renderAjax('create', [
-                'model' => $model,
+                'model' => $model
             ]);
         endif;
         throw new ForbiddenHttpException("You Can't Access This Page");
@@ -110,10 +103,10 @@ class CurrenciesController extends Controller
 
     public function actionValidate($code = '')
     {
-        $model = new MCurrencies();
+        $model = new MWupaItems();
         if ($code) :
             $code = Yii::$app->encryptor->decodeUrl($code);
-            $model = MCurrencies::findOne($code);
+            $model = MWupaItems::findOne($code);
         endif;
         if ($model->load(Yii::$app->request->post())) :
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -124,7 +117,7 @@ class CurrenciesController extends Controller
 
     public function actionView($code)
     {
-        if (Yii::$app->user->can('/companies/view') || 1) :
+        if (Yii::$app->user->can('/MWupaItems/view') || 1) :
             $code = Yii::$app->encryptor->decodeUrl($code);
             $model = $this->findModel($code);
             return $this->render('view', [
@@ -136,24 +129,30 @@ class CurrenciesController extends Controller
 
     public function actionUpdate($code)
     {
-        if (Yii::$app->user->can('/currencies/view') || 1) :
+        if (!Yii::$app->request->isAjax) :
+            return $this->redirect('index');
+        endif;
+        if (Yii::$app->user->can('/MWupaItems/view') || 1) :
             $code = Yii::$app->encryptor->decodeUrl($code);
             $model = $this->findModel($code);
             $msg = "";
             if ($model->load(Yii::$app->request->post())) :
-                $model->updated_by = Yii::$app->user->id;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 if ($model->save()) :
-                    $msg = "Data berhasil di ubah";
+                    $msg = Yii::t("app", "Data berhasil di ubah");
                     Yii::$app->session->setFlash('success', $msg);
-                    Yii::$app->response->format = Response::FORMAT_JSON;
                     return ['status' => 1, 'id' => Yii::$app->encryptor->encodeUrl($model->id), 'from' => 'update', 'type' => null, 'msg' => $msg];
                 endif;
                 $err = $model->getErrors();
                 $msg = $err[key($err)][0];
                 Yii::$app->session->setFlash('danger', $msg);
+                return ['status' => 0, 'msg' => $msg];
             endif;
-            return $this->render('update', [
-                'model' => $model
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'units' => ArrayHelper::map(MUnitCodes::find()->where(['id' => $model->default_unit_code_id])->all(), 'id', function ($data) {
+                    return $data->code . " | " . $data->title;
+                })
             ]);
         endif;
         throw new ForbiddenHttpException("You Can't Access This Page");
@@ -162,19 +161,12 @@ class CurrenciesController extends Controller
     public function actionDelete()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if (Yii::$app->user->can('/currencies/delete') || 1) :
-            $code  = Yii::$app->encryptor->decodeUrl(Yii::$app->request->post('code'));
+        if (Yii::$app->user->can('/MWupaItems/delete') || 1) :
+            $code = Yii::$app->encryptor->decodeUrl(Yii::$app->request->post('code'));
             $model = $this->findModel($code);
-            if ($model) :
-                $msg = "Data berhasil di hapus";
-                Yii::$app->session->setFlash('success', $msg);
-                $model->deleted_at = time();
-                $model->deleted_by = Yii::$app->user->id;
-                $model->save(false);
+            if ($model->delete()) :
                 return ['status' => 1];
             endif;
-            $msg = "Data gagal di hapus";
-            Yii::$app->session->setFlash('danger', $msg);
             return ['status' => -1];
         endif;
         return ['status' => -99];
@@ -182,7 +174,7 @@ class CurrenciesController extends Controller
 
     protected function findModel($id)
     {
-        $model = MCurrencies::find()->where(['id' => $id])
+        $model = MWupaItems::find()->where(['id' => $id])
             ->andWhere(['deleted_at' => NULL])
             ->one();
         if ($model !== null) :
@@ -207,8 +199,67 @@ class CurrenciesController extends Controller
             $_file = $gdrive->uploadFile($file->name, $file->tempName, $file->type);
             Yii::$app->response->statusCode = 200;
             return Yii::$app->params['drive']['urlOpen'] . $_file;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Yii::$app->response->statusCode = 500;
         }
+    }
+
+    public function actionGetUnits()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = MUnitCodes::find()
+            ->where(['or', ['like', 'code', $term], ['like', 'title', $term]])
+            ->andWhere(['status' => 1])
+            ->andWhere(['deleted_at' => NULL])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->code . " | " . $data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
+    }
+
+    public function actionGetContractors()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = Contractors::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['status' => 1])
+            ->andWhere(['deleted_at' => NULL])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
+    }
+
+    public function actionGetMWupaItems()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = MWupaItems::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['deleted_at' => NULL])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->code . ' | ' . $data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
     }
 }

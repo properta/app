@@ -1,18 +1,19 @@
 <?php
 
 use yii\helpers\{
-    Html, Url
+    Html,
+    Url
 };
 use yii\widgets\ActiveForm;
 use app\utils\template\Template;
 ?>
 
 <?php $form = ActiveForm::begin([
-    'enableClientValidation'=>true,
-    'enableAjaxValidation'=>true,
-    'options'=>['data-pjax'=>1],
-    'validationUrl' => Url::toRoute($model->isNewRecord?['validate']:['validate', 'code'=>Yii::$app->encryptor->encodeUrl($model->id)]),
-    ]); ?>
+    'enableClientValidation' => true,
+    'enableAjaxValidation' => true,
+    'options' => ['data-pjax' => 1],
+    'validationUrl' => Url::toRoute($model->isNewRecord ? ['validate'] : ['validate', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]),
+]); ?>
 <div class="row">
     <div class="col-12 col-lg-8 col-md-8">
         <div class="card">
@@ -20,19 +21,19 @@ use app\utils\template\Template;
                 <h4><?= $this->title ?></h4>
             </div>
             <div class="card-body">
-                <?= $form->field($model, 'title', Template::template('fas fa-hashtag'))->textInput(['maxlength' => true, 'placeholder' =>'Title of Article'])->label('Title') ?>
+                <?= $form->field($model, 'title', Template::template('fas fa-hashtag'))->textInput(['maxlength' => true, 'placeholder' => 'Title of Article'])->label('Title') ?>
 
-                <?= $form->field($model, 'slug', Template::template('fas fa-link'))->textInput(['maxlength' => true, 'placeholder' =>'url-seo-friendly'])->label('Url SEO') ?>
+                <?= $form->field($model, 'slug', Template::template('fas fa-link'))->textInput(['maxlength' => true, 'placeholder' => 'url-seo-friendly'])->label('Url SEO') ?>
 
-                <?= $form->field($model, 'content')->textArea(['maxlength' => true, 'placeholder' =>'', 'class' =>'summernote form-control'])->label('Content') ?>
+                <?= $form->field($model, 'content')->textArea(['maxlength' => true, 'placeholder' => '', 'class' => 'summernote form-control'])->label('Content') ?>
 
                 <div class="-tw-w-auto tw-px-5 tw-bg-gray-100 -tw-mx-6">
                     <p>Optional Setting for Improve SEO</p>
                 </div>
 
-                <?= $form->field($model, 'seo_meta_data[title]', Template::template('fas fa-link'))->textInput(['maxlength' => true, 'value'=>!$model->isNewRecord?($meta->title??''):'', 'placeholder' =>'Seo Title'])->label('SEO Title') ?>
+                <?= $form->field($model, 'seo_meta_data[title]', Template::template('fas fa-link'))->textInput(['maxlength' => true, 'value' => !$model->isNewRecord ? ($meta->title ?? '') : '', 'placeholder' => 'Seo Title'])->label('SEO Title') ?>
 
-                <?= $form->field($model, 'seo_meta_data[desc]')->textArea(['maxlength' => true, 'value'=>!$model->isNewRecord?($meta->desc??''):'', 'placeholder' =>'', 'class'=>'form-control'])->label('SEO Meta Desc') ?>
+                <?= $form->field($model, 'seo_meta_data[desc]')->textArea(['maxlength' => true, 'value' => !$model->isNewRecord ? ($meta->desc ?? '') : '', 'placeholder' => '', 'class' => 'form-control'])->label('SEO Meta Desc') ?>
 
             </div>
         </div>
@@ -44,24 +45,24 @@ use app\utils\template\Template;
                 <div class="form">
                     <div class="">
                         <?= $form->field($model, 'category_id')
-                        ->dropDownList($categories??[], ['class'=>'form-control get-categories select2', 'prompt'=>'--choose one--'])->label("Category"); ?>
+                            ->dropDownList($categories ?? [], ['class' => 'form-control get-categories select2', 'prompt' => '--choose one--'])->label("Category"); ?>
                         <p class="-mt-5 float-right">
-                            <?= Html::a('add category', ["@web/".Yii::$app->controller->module->id."/masters", 'type'=>'article-categories'], ['class' => 'profile-link']) ?>
+                            <?= Html::a('add category', ["@web/" . Yii::$app->controller->module->id . "/masters", 'type' => 'article-categories'], ['class' => 'profile-link']) ?>
                         </p>
                     </div>
 
                     <?= $form->field($model, 'status')
-                        ->dropDownList([2=>'draf', 1=>'publish'], ['class'=>'form-control'])->label("Status"); 
+                        ->dropDownList([2 => 'draf', 1 => 'publish'], ['class' => 'form-control'])->label("Status");
                     ?>
                     <?= $form->field($model, 'tags')
-                        ->dropDownList($tags??[], ['class'=>'form-control get-tags select2', 'multiple'=>true, 'value'=>isset($tags)?array_keys($tags):[]])->label("Tags"); ?>
+                        ->dropDownList($tags ?? [], ['class' => 'form-control get-tags select2', 'multiple' => true, 'value' => isset($tags) ? array_keys($tags) : []])->label("Tags"); ?>
 
                     <?= $form->field($model, 'thumbnail', Template::image())->fileInput([
-                        'class'=>'filepond',
-                        'data-allow-reorder'=>true,
-                        'data-max-file-size'=>'3MB',
+                        'class' => 'filepond',
+                        'data-allow-reorder' => true,
+                        'data-max-file-size' => '3MB',
                         // 'required'=>$model->image?false:true,
-                        'data-max-files'=>'1'
+                        'data-max-files' => '1'
                     ])->label('Tumbnail') ?>
 
                 </div>

@@ -78,7 +78,7 @@ class MWupaItems extends MWupaItemsModel
             ->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'desc', $this->desc])
             ->andFilterWhere(['like', 'default_unit_code_str', $this->default_unit_code_str]);
-        
+
         $query->orFilterWhere(['like', 'code', $this->query])
             ->orFilterWhere(['like', 'title', $this->query])
             ->orFilterWhere(['like', 'desc', $this->query])

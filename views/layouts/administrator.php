@@ -95,9 +95,7 @@ $breadcrumb = BC::generateBreadcrumbs($router, "breadcrumb-item");
     ?>
 </body>
 
-<?php
-$this->render('js');
-?>
+<?= $this->render('js'); ?>
 
 </html>
 <?php $this->endPage() ?>

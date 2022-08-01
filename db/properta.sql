@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 07, 2022 at 08:56 AM
+-- Generation Time: Aug 01, 2022 at 04:48 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.21
 
@@ -240,6 +240,27 @@ CREATE TABLE `markers` (
   `longitude` decimal(10,0) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `status` tinyint(1) DEFAULT 1,
+  `created_at` int(11) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `deleted_at` int(11) DEFAULT NULL,
+  `deleted_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `material_prices`
+--
+
+CREATE TABLE `material_prices` (
+  `id` int(11) NOT NULL,
+  `code` varchar(15) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `material_id` int(11) DEFAULT NULL,
+  `price` decimal(12,2) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` int(11) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated_at` int(11) DEFAULT NULL,
@@ -560,7 +581,8 @@ INSERT INTO `m_currencies` (`id`, `code`, `title`, `desc`, `status`, `created_at
 (285, 'ZWR', 'Zimbabwean Dollar (2008)', '', 1, NULL, 1, 1646474187, 1, NULL, NULL),
 (286, 'asd', 'asd', 'asdasd', 1, 1646471742, 1, 1646472914, 1, 1646472914, 1),
 (287, 'asd', 'asd', 'asdss', 1, 1646471894, 1, 1646472590, 1, 1646472590, 1),
-(288, 'TEST', 'Indonesia', 'asdasd', 1, 1646473210, 1, 1646473248, 1, 1646473248, 1);
+(288, 'TEST', 'Indonesia', 'asdasd', 1, 1646473210, 1, 1646473248, 1, 1646473248, 1),
+(289, 'ABC', 'Imron', 'Hehe', 1, 1657298918, 1, 1657298918, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -608,6 +630,13 @@ CREATE TABLE `m_occupations` (
   `deleted_by` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `m_occupations`
+--
+
+INSERT INTO `m_occupations` (`id`, `code`, `title`, `level`, `desc`, `proficiencie_id`, `default_unit_code_id`, `default_unit_code_str`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 'HSPP1', '	\r\nHARGA SATUAN PEKERJAAN PERSIAPAN', 1, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -629,6 +658,35 @@ CREATE TABLE `m_proficiencies` (
   `deleted_by` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `m_proficiencies`
+--
+
+INSERT INTO `m_proficiencies` (`id`, `code`, `title`, `desc`, `default_unit_code_id`, `default_unit_code_str`, `status`, `created_at`, `created_by`, `updated_at`, `deleted_at`, `deleted_by`) VALUES
+(1, 'PKR', 'Pekerja', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(2, 'TKG', 'Tukang', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(3, 'TKG-GL', 'Tukang Gali', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(4, 'TKG-BT', 'Tukang Batu', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(5, 'TKG-KY', 'Tukang Kayu', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(6, 'TKG-CT', 'Tukang Cat/ Pelitur', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(7, 'TKG-BS', 'Tukang Besi', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(8, 'TKG-PP', 'Tukang Pipa/ Operator Pipa', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(9, 'TKG-BR', 'Tukang Pengayam Bronjong', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(10, 'TKG-TB', 'Tukang Tebas', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(11, 'KPL', 'Kepala Tukang', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(12, 'MND', 'Mandor', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(13, 'JRU', 'Juru Ukur', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(14, 'PJR', 'Pembantu Juru Ukur', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(15, 'AAB', 'Ahli Alat Berat ( Mekanik )', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(16, 'OPR', 'Operator', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(17, 'POP', 'Pembantu Operator', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(18, 'STR', 'Supir Truk', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(19, 'KTR', 'Kernek Truk', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(20, 'PEM', 'Penjaga Malam', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(21, 'JUG', 'Juru Gambar (Drafter)', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(22, 'DEN', 'Design Enginer', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL),
+(23, 'OPP', 'Operator Printer/ Plotter', NULL, 12, NULL, 1, 1628006795, NULL, 1628006795, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -648,6 +706,24 @@ CREATE TABLE `m_unit_codes` (
   `deleted_at` int(11) DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `m_unit_codes`
+--
+
+INSERT INTO `m_unit_codes` (`id`, `code`, `title`, `desc`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 'M2', 'Meter Persegi', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(2, 'M3', 'Meter Kubik', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(3, 'Tt', 'Titik', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(4, 'Zk', 'Zak', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(5, 'M', 'Meter', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(6, 'Lmb', 'Lembar', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(7, 'L', 'Liter', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(8, 'Ktk', 'Kotak', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(9, 'Kg', 'Kilo Gram', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(10, 'Bh', 'Buah', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(11, 'Btg', 'Batang', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL),
+(12, 'OH', 'Orang Harian', NULL, 1, NULL, NULL, 1628006795, NULL, 1628006795, NULL);
 
 -- --------------------------------------------------------
 
@@ -691,6 +767,23 @@ CREATE TABLE `m_wupa_items` (
   `deleted_at` int(11) DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `m_wupa_items`
+--
+
+INSERT INTO `m_wupa_items` (`id`, `code`, `title`, `desc`, `default_unit_code_id`, `default_unit_code_str`, `level`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(3, 'A.1.1.2', 'Hello Cinto Sayang!', '', NULL, NULL, 1, 1, 1658653829, 1, 1658653838, 1, 1658653838, 1),
+(4, 'A.1.1.3', 'Pagar Sementara Dari Seng Gelombang Tinggi 2 Meter (K3)', '', 1, NULL, 1, 1, 1658662068, 1, 1658663525, 1, NULL, NULL),
+(5, 'A.1.1.2', 'asdasdasd', '', 1, NULL, 1, 1, 1658663496, 1, 1658663496, NULL, NULL, NULL),
+(6, 'A.1.1.4', 'asdkasdasd', '', 1, NULL, 1, 1, 1658663788, 1, 1658663788, NULL, NULL, NULL),
+(7, 'asdasd', 'asdasd', '', 1, NULL, 1, 1, 1658663826, 1, 1658667430, 1, 1658667430, 1),
+(8, '234', 'asdasd', '', 1, NULL, 2, 1, 1658667410, 1, 1658667587, 1, 1658667587, 1),
+(9, 'fdsdff', 'dfgfgdfg', '', NULL, NULL, 2, 1, 1658667425, 1, 1658667688, 1, 1658667688, 1),
+(10, '5454', '456456456', '', NULL, NULL, 2, 1, 1658667436, 1, 1658667685, 1, 1658667685, 1),
+(11, 'asd', 'asdasdasd', '', 1, NULL, 2, 1, 1658667517, 1, 1658667557, 1, NULL, NULL),
+(12, 'asd11', 'asd', '', NULL, NULL, 1, 1, 1658667533, 1, 1658667533, NULL, NULL, NULL),
+(13, 'sss', 'asdasdasd', '', 1, NULL, 2, 1, 1658667550, 1, 1658667550, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -827,11 +920,16 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`id`, `code`, `title`, `desc`, `building_permit_number`, `area_code`, `region_id`, `region_str`, `pic_id`, `pic_str`, `pic_phone_number`, `contractor_id`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 'BENISON123', 'PROJEK 123', 'asdasd', 'asdasd', 'PKU', NULL, NULL, NULL, 'Imron Rosadi', '085265279959', NULL, 1, 1646510657, 1, 1646511047, 1, NULL, NULL),
-(82, '3434', '3434', '3434', '3434', '3434', NULL, NULL, NULL, '3434', '3434', NULL, 1, 1646513201, 1, 1646513207, 1, NULL, NULL),
-(83, 'sdsd', 'sd', 'sd', 'sd', 'sd', NULL, NULL, NULL, 'sd', 'sd', NULL, 1, 1646513230, 1, 1646513230, NULL, NULL, NULL),
-(84, 'aasd', 'asd', 'asd', 'asd', 'asd', NULL, NULL, NULL, 'asd', 'asd', NULL, 1, 1646513478, 1, 1646513478, NULL, NULL, NULL),
-(85, 'asd', 'asd', 'asds', 'asd', 'asd', NULL, NULL, NULL, 'asd', 'asd', 12, 1, 1646639684, 1, 1646639757, 1, NULL, NULL);
+(1, 'BENISON123', 'PROJEK 123', 'asdasd', 'asdasd', 'PKU', NULL, NULL, NULL, 'Imron Rosadi', '085265279959', NULL, 1, 1646510657, 1, 1657299555, NULL, 1657299555, 1),
+(82, '3434', '3434', '3434', '3434', '3434', NULL, NULL, NULL, '3434', '3434', NULL, 1, 1646513201, 1, 1657298959, NULL, 1657298959, 1),
+(83, 'sdsd', 'sd', 'sd', 'sd', 'sd', NULL, NULL, NULL, 'sd', 'sd', NULL, 1, 1646513230, 1, 1657299518, NULL, 1657299518, 1),
+(84, 'aasd', 'asd', 'asd', 'asd', 'asd', NULL, NULL, NULL, 'asd', 'asd', NULL, 1, 1646513478, 1, 1657299404, NULL, 1657299404, 1),
+(85, 'asd', 'asd', 'asds', 'asd', 'asd', NULL, NULL, NULL, 'asd', 'asd', 12, 1, 1646639684, 1, 1657299309, 1, 1657299309, 1),
+(86, 'PRJ001', 'Perumahan AURI Jaya', '-', '9900 8765 0099', 'PKU002', NULL, NULL, NULL, 'Imron Rosadi', '085265279959', 13, 1, 1657299208, 1, 1657299355, 1, 1657299355, 1),
+(87, 'asd', 'asd', 'asd', 'asdasd', 'asd', NULL, NULL, NULL, 'asd', 'asdasd', 11, 1, 1657299578, 1, 1658244159, 1, 1658244156, 1),
+(88, '1213', 'Proyek 123', 'q', '1122', 'sdfsdf', NULL, NULL, NULL, 'Imron Rosadi', '+6285265279959', 11, 1, 1658327787, 1, 1658327787, NULL, NULL, NULL),
+(89, '1123', 'PROJEK 123', 'asd', 'asd', 'asd', NULL, NULL, NULL, '123', '3454646', 12, 1, 1658327813, 1, 1658327885, 1, 1658327885, 1),
+(90, 'Test 123', 'sdfsdf', 'sdfsdf', 'sdfsdfsdf', 'sdfsdf', NULL, NULL, NULL, 'Imron Rosadi', '45456456', 12, 1, 1658564056, 1, 1658564056, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -892,7 +990,11 @@ INSERT INTO `settings` (`id`, `name`, `value`, `value_`, `status`, `created_at`,
 (8, 'default_working_hours', '8', '', 1, NULL, NULL, NULL, NULL, NULL, NULL),
 (9, 'default_week_start', '0', 'Senin', 1, NULL, NULL, NULL, NULL, NULL, NULL),
 (10, 'default_week_end', '5', 'Sabtu', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(11, 'max_contractors', '1A3.miKWfYIOBFhtoaZO0LK5ThX4slYZooOoXYq3HR6cTtw', '', 1, NULL, NULL, NULL, NULL, NULL, NULL);
+(11, 'max_contractors', '1A3.miKWfYIOBFhtoaZO0LK5ThX4slYZooOoXYq3HR6cTtw', '', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 'wupa_sub_item_groups', 'A', 'TENAGA', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(13, 'wupa_sub_item_groups', 'B', 'BAHAN', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(14, 'wupa_sub_item_groups', 'C', 'PERALATAN', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(15, 'wupa_overhead', '10', 'percentage', 1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -943,15 +1045,16 @@ INSERT INTO `users` (`id`, `username`, `full_name`, `auth_key`, `password_hash`,
 
 CREATE TABLE `wupa_coefficients` (
   `id` int(11) NOT NULL,
-  `code` char(15) DEFAULT NULL,
-  `wupa_master_id` int(11) DEFAULT NULL,
-  `parent_item_id` int(11) DEFAULT NULL,
-  `category_item_id` int(11) DEFAULT NULL,
+  `code` varchar(15) DEFAULT NULL,
   `item_id` int(11) DEFAULT NULL,
+  `sub_item_group_id` int(11) DEFAULT NULL,
+  `sub_item_id` int(11) DEFAULT NULL,
+  `sub_item_str` varchar(255) DEFAULT NULL,
+  `sub_item_table` varchar(255) DEFAULT NULL,
+  `coefficient` float DEFAULT NULL,
   `unit_code_id` int(11) DEFAULT NULL,
-  `unit_code_str` char(100) NOT NULL,
-  `coefficient` double DEFAULT NULL,
-  `status` tinyint(1) DEFAULT 1,
+  `unit_code_str` int(11) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` int(11) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated_at` int(11) DEFAULT NULL,
@@ -959,6 +1062,36 @@ CREATE TABLE `wupa_coefficients` (
   `deleted_at` int(11) DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wupa_items`
+--
+
+CREATE TABLE `wupa_items` (
+  `id` int(11) NOT NULL,
+  `code` varchar(15) DEFAULT NULL,
+  `wupa_master_id` int(11) DEFAULT NULL,
+  `occupation_id` int(11) DEFAULT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `divided` float NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` int(11) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `deleted_at` int(11) DEFAULT NULL,
+  `deleted_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `wupa_items`
+--
+
+INSERT INTO `wupa_items` (`id`, `code`, `wupa_master_id`, `occupation_id`, `item_id`, `divided`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(7, 'ASP001', 2, NULL, 13, 1, 1, 1659160569, 1, 1659160569, NULL, NULL, NULL),
+(8, 'ASP002', 2, NULL, 11, 1, 1, 1659160580, 1, 1659160580, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -979,6 +1112,13 @@ CREATE TABLE `wupa_masters` (
   `deleted_at` int(11) DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `wupa_masters`
+--
+
+INSERT INTO `wupa_masters` (`id`, `code`, `title`, `desc`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(2, 'Y0HPKv', 'AHSP Pemerintah Tahun 2021', '-', 1, 1658339149, 1, 1659156007, 1, NULL, 1);
 
 --
 -- Indexes for dumped tables
@@ -1084,6 +1224,17 @@ ALTER TABLE `markers`
   ADD KEY `updated_by` (`updated_by`),
   ADD KEY `project_id` (`project_id`),
   ADD KEY `marker_type_id` (`marker_type_id`);
+
+--
+-- Indexes for table `material_prices`
+--
+ALTER TABLE `material_prices`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `deleted_by` (`deleted_by`),
+  ADD KEY `material_id` (`material_id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `updated_by` (`updated_by`);
 
 --
 -- Indexes for table `m_currencies`
@@ -1234,13 +1385,24 @@ ALTER TABLE `users`
 --
 ALTER TABLE `wupa_coefficients`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `category_item_id` (`category_item_id`),
   ADD KEY `created_by` (`created_by`),
   ADD KEY `deleted_by` (`deleted_by`),
   ADD KEY `updated_by` (`updated_by`),
-  ADD KEY `parent_item_id` (`parent_item_id`),
+  ADD KEY `sub_item_group_id` (`sub_item_group_id`),
   ADD KEY `unit_code_id` (`unit_code_id`),
-  ADD KEY `wupa_master_id` (`wupa_master_id`);
+  ADD KEY `wupa_coefficients_ibfk_4` (`item_id`);
+
+--
+-- Indexes for table `wupa_items`
+--
+ALTER TABLE `wupa_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `deleted_by` (`deleted_by`),
+  ADD KEY `updated_by` (`updated_by`),
+  ADD KEY `item_id` (`item_id`),
+  ADD KEY `wupa_items_ibfk_5` (`wupa_master_id`),
+  ADD KEY `occupation_id` (`occupation_id`);
 
 --
 -- Indexes for table `wupa_masters`
@@ -1301,7 +1463,7 @@ ALTER TABLE `markers`
 -- AUTO_INCREMENT for table `m_currencies`
 --
 ALTER TABLE `m_currencies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=289;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=290;
 
 --
 -- AUTO_INCREMENT for table `m_materials`
@@ -1313,19 +1475,19 @@ ALTER TABLE `m_materials`
 -- AUTO_INCREMENT for table `m_occupations`
 --
 ALTER TABLE `m_occupations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `m_proficiencies`
 --
 ALTER TABLE `m_proficiencies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `m_unit_codes`
 --
 ALTER TABLE `m_unit_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `m_wind_directions`
@@ -1337,7 +1499,7 @@ ALTER TABLE `m_wind_directions`
 -- AUTO_INCREMENT for table `m_wupa_items`
 --
 ALTER TABLE `m_wupa_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -1367,7 +1529,7 @@ ALTER TABLE `plot_of_lands`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `project_settings`
@@ -1379,7 +1541,7 @@ ALTER TABLE `project_settings`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1394,10 +1556,16 @@ ALTER TABLE `wupa_coefficients`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `wupa_items`
+--
+ALTER TABLE `wupa_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `wupa_masters`
 --
 ALTER TABLE `wupa_masters`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -1487,6 +1655,16 @@ ALTER TABLE `markers`
   ADD CONSTRAINT `markers_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `markers_ibfk_4` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `markers_ibfk_5` FOREIGN KEY (`marker_type_id`) REFERENCES `settings` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `material_prices`
+--
+ALTER TABLE `material_prices`
+  ADD CONSTRAINT `material_prices_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `material_prices_ibfk_2` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `material_prices_ibfk_3` FOREIGN KEY (`material_id`) REFERENCES `m_materials` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `material_prices_ibfk_4` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `material_prices_ibfk_5` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `m_currencies`
@@ -1616,13 +1794,23 @@ ALTER TABLE `settings`
 -- Constraints for table `wupa_coefficients`
 --
 ALTER TABLE `wupa_coefficients`
-  ADD CONSTRAINT `wupa_coefficients_ibfk_1` FOREIGN KEY (`category_item_id`) REFERENCES `m_wupa_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `wupa_coefficients_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `wupa_coefficients_ibfk_3` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `wupa_coefficients_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `wupa_coefficients_ibfk_5` FOREIGN KEY (`parent_item_id`) REFERENCES `m_wupa_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `wupa_coefficients_ibfk_6` FOREIGN KEY (`unit_code_id`) REFERENCES `m_unit_codes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `wupa_coefficients_ibfk_7` FOREIGN KEY (`wupa_master_id`) REFERENCES `wupa_masters` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `wupa_coefficients_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_coefficients_ibfk_2` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_coefficients_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_coefficients_ibfk_4` FOREIGN KEY (`item_id`) REFERENCES `wupa_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_coefficients_ibfk_5` FOREIGN KEY (`sub_item_group_id`) REFERENCES `settings` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_coefficients_ibfk_6` FOREIGN KEY (`unit_code_id`) REFERENCES `m_unit_codes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `wupa_items`
+--
+ALTER TABLE `wupa_items`
+  ADD CONSTRAINT `wupa_items_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_items_ibfk_2` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_items_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_items_ibfk_4` FOREIGN KEY (`item_id`) REFERENCES `m_wupa_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_items_ibfk_5` FOREIGN KEY (`wupa_master_id`) REFERENCES `wupa_masters` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wupa_items_ibfk_6` FOREIGN KEY (`occupation_id`) REFERENCES `m_occupations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `wupa_masters`

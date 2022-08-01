@@ -31,8 +31,7 @@ $this->title = Yii::t('app', 'Detail of Work Unit Price Analysis');
                         </tr>
                         <tr>
                             <td colspan="3">
-                                <span class="tw-font-bold"><?= $model->getAttributeLabel('desc') ?></span>
-                                <p><?= $model->desc ?? "" ?></p>
+                                <p title="<?= $model->getAttributeLabel('desc') ?>"><?= $model->desc ?? "" ?></p>
                             </td>
                         </tr>
                     </table>
@@ -90,6 +89,9 @@ $this->title = Yii::t('app', 'Detail of Work Unit Price Analysis');
 </div>
 <div class="row">
     <div class="col-12">
+        <p>
+            <?= Html::a('<i class="fa fa-plus"></i> ' . Yii::t('app', 'item'), ['add-item', 'code' => Yii::$app->encryptor->encodeUrl($model->id)], ['class' => 'btn btn-info m-1', 'data-title' => Yii::t('app', 'Add Wupa Coefficient')]) ?>
+        </p>
         <div class="card">
             <div class="card-header">
                 <h4> <?= $this->title ?></h4>
@@ -155,7 +157,7 @@ $this->title = Yii::t('app', 'Detail of Work Unit Price Analysis');
                                 }
                             ],
                             [
-                                'label' => Yii::t('app', 'Kode'),
+                                'label' => Yii::t('app', 'Code'),
                                 'format' => 'raw',
                                 'contentOptions' => ['style' => 'width:96px;'],
                                 'value' => function ($model) {
@@ -164,19 +166,28 @@ $this->title = Yii::t('app', 'Detail of Work Unit Price Analysis');
                                 }
                             ],
                             [
-                                'label' => Yii::t('app', 'Topik'),
+                                'label' => Yii::t('app', 'Parent Code'),
                                 'format' => 'raw',
-                                'contentOptions' => ['style' => 'width:240px;'],
+                                'contentOptions' => ['style' => 'width:96px;'],
                                 'value' => function ($model) {
-                                    return $model->title ?? "";
+                                    $code = $model->wupaMaster->code ?? "-";
+                                    return "<span class='tw-text-bold'>{$code}</span>";
                                 }
                             ],
                             [
-                                'label' => Yii::t('app', 'File Materi'),
+                                'label' => Yii::t('app', 'Item '),
                                 'format' => 'raw',
                                 'contentOptions' => ['style' => 'width:240px;'],
                                 'value' => function ($model) {
-                                    return $model->title ?? "";
+                                    return $model->item->title ?? "";
+                                }
+                            ],
+                            [
+                                'label' => Yii::t('app', 'Unit'),
+                                'format' => 'raw',
+                                'contentOptions' => ['style' => 'width:240px;'],
+                                'value' => function ($model) {
+                                    return $model->item->defaultUnitCode->code ?? "";
                                 }
                             ],
                             [
@@ -207,10 +218,20 @@ $this->title = Yii::t('app', 'Detail of Work Unit Price Analysis');
                                     'delete' => false,
                                     'view' => false,
                                 ],
-                                'template' => '{add}',
+                                'template' => '{add}{more}',
                                 'buttons' => array(
                                     'add' => function ($url, $model, $key) {
-                                        return Html::a('<i class="fas fa-plus"></i> ', Url::to(['add-material', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-primary m-1 add-material', 'title' => Yii::t('app', 'Tambah Materi/ File'), 'data-key' => $key]);
+                                        return Html::a('<i class="fas fa-plus"></i> ', Url::to(['add-coe', 'code' => Yii::$app->encryptor->encodeUrl($model->id)]), ['class' => 'btn btn-sm btn-primary m-1 add-coe', 'data-title' => Yii::t('app', 'Tambah Coe'), 'data-key' => $key]);
+                                    },
+                                    'more' => function ($url, $model, $key) {
+                                        return '<div class="dropdown d-inline">
+                                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            ' . Yii::t('app', 'more') . '
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            ' . Html::a(Yii::t('app', 'delete'), null, ['class' => 'delete-item dropdown-item tw-whitespace-nowrap', 'data-id' => Yii::$app->encryptor->encodeUrl($model->id), 'data-title' => Yii::t('app', 'Delete Item'), 'data-desc' => Yii::t('app', 'Tindakan ini tidak bisa dibatalkan!')]) . '
+                                                        </div>
+                                                    </div>';
                                     }
                                 )
                             ],
@@ -228,6 +249,9 @@ function processData(type, code, title="", msg=""){
     switch(type){
         case "delete":
             url= baseUrl+module+'/'+controller+'/delete'
+            break;
+        case "delete-item":
+            url= baseUrl+module+'/'+controller+'/delete-item'
             break;
     }
     Swal.fire({
@@ -276,7 +300,12 @@ function processData(type, code, title="", msg=""){
                 textSuccess,
                 'success'
             ).then(function () {
-                $.pjax({url:'index', container:'#p0', timeout: false});
+                if(type=="delete"){
+                    $.pjax({url:'index', container:'#p0', timeout: false});
+                }
+                if(type=="delete-item"){
+                     $.pjax.reload({container: '#p0', timeout: false});
+                }
             });
         }
         else if(value==-1){
@@ -303,10 +332,14 @@ function init(){
     $('#delete').click(function(){
         processData("delete", $(this).data('id'), $(this).data("title"), $(this).data("desc"));
     })
-    $('a.add-material').click(function(e){
+    $('a.delete-item').click(function(e){
+        e.preventDefault();
+        processData("delete-item", $(this).data('id'), $(this).data("title"), $(this).data("desc"));
+    })
+    $('a.add-coe').click(function(e){
         e.preventDefault();
         let key = $(this).data('key');
-        $('#modalTitle').html('Tambah Materi (File/ Video)')
+        $('#modalTitle').html($(this).data('title'))
         let url = $(this).attr('href');
         $.get(url, function(data) {
             data = "<div>"+data+"<span id='iskey' data-key="+key+">&nbsp;</span></div>";
@@ -342,11 +375,7 @@ function init(){
     $('#reset').click(function(e){
         $.pjax({url:'index', container:'#p0', timeout: false});
     })
-
-    $('a.delete').click(function(e){
-        e.preventDefault();
-        processData("delete", $(this).data('id'), $(this).data('key'))
-    });
+    
     $('.lazy').lazy();
 }
 

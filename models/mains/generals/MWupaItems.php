@@ -48,18 +48,41 @@ class MWupaItems extends \yii\db\ActiveRecord
         ];
     }
 
+    //fungsi delete
+    public function delete()
+    {
+        $this->scenario = 'delete';
+        if ($this->save()) :
+            return true;
+        endif;
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
+            ['code', 'unique'],
+            [['code', 'title'], 'required'],
             [['desc'], 'string'],
             [['default_unit_code_id', 'level', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
             [['code'], 'string', 'max' => 15],
             [['title'], 'string', 'max' => 255],
             [['default_unit_code_str'], 'string', 'max' => 100],
-            ['created_by', 'default', 'value'=>Yii::$app->user->id],
+
+            // tambah bagian ini
+            ['created_by', 'default', 'value' => Yii::$app->user->id],
+            ['updated_by', 'default', 'value' => Yii::$app->user->id, 'when' => function ($model) {
+                return !$model->isNewRecord;
+            }],
+            ['deleted_at', 'default', 'value' => time(), 'on' => 'delete'],
+            ['deleted_by', 'default', 'value' => Yii::$app->user->id, 'on' => 'delete'],
+            ['level', 'default', 'value' => 1, 'on' => 'wupa-category'],
+            ['level', 'default', 'value' => 2],
+            [['desc'], 'filter', 'filter' => '\yii\helpers\HtmlPurifier::process'],
+
             [['default_unit_code_id'], 'exist', 'skipOnError' => true, 'targetClass' => MUnitCodes::className(), 'targetAttribute' => ['default_unit_code_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['deleted_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['deleted_by' => 'id']],
@@ -131,22 +154,12 @@ class MWupaItems extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[WupaCoefficients]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWupaCoefficients()
-    {
-        return $this->hasMany(WupaCoefficients::className(), ['category_item_id' => 'id']);
-    }
-
-    /**
      * Gets query for [[WupaCoefficients0]].
      *
      * @return \yii\db\ActiveQuery
      */
     public function getWupaCoefficients0()
     {
-        return $this->hasMany(WupaCoefficients::className(), ['parent_item_id' => 'id']);
+        return $this->hasMany(WupaCoefficients::className(), ['item_id' => 'id']);
     }
 }

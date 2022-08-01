@@ -3,22 +3,23 @@
 namespace app\models\mains\generals;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 use app\models\identities\Users;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "wupa_coefficients".
  *
  * @property int $id
  * @property string|null $code
- * @property int|null $wupa_master_id
- * @property int|null $parent_item_id
- * @property int|null $category_item_id
  * @property int|null $item_id
- * @property int|null $unit_code_id
- * @property string $unit_code_str
+ * @property int|null $sub_item_group_id
+ * @property int|null $sub_item_id
+ * @property string|null $sub_item_str
+ * @property string|null $sub_item_table
  * @property float|null $coefficient
- * @property int|null $status
+ * @property int|null $unit_code_id
+ * @property int|null $unit_code_str
+ * @property int $status
  * @property int|null $created_at
  * @property int|null $created_by
  * @property int|null $updated_at
@@ -26,13 +27,12 @@ use app\models\identities\Users;
  * @property int|null $deleted_at
  * @property int|null $deleted_by
  *
- * @property MWupaItems $categoryItem
  * @property Users $createdBy
  * @property Users $deletedBy
- * @property MWupaItems $parentItem
+ * @property MWupaItems $item
+ * @property Settings $subItemGroup
  * @property MUnitCodes $unitCode
  * @property Users $updatedBy
- * @property WupaMasters $wupaMaster
  */
 class WupaCoefficients extends \yii\db\ActiveRecord
 {
@@ -51,25 +51,41 @@ class WupaCoefficients extends \yii\db\ActiveRecord
         ];
     }
 
+    //fungsi delete
+    public function delete()
+    {
+        $this->scenario = 'delete';
+        if ($this->save()) :
+            return true;
+        endif;
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['wupa_master_id', 'parent_item_id', 'category_item_id', 'item_id', 'unit_code_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
-            [['unit_code_str'], 'required'],
+            [['item_id', 'sub_item_group_id', 'sub_item_id', 'unit_code_id', 'unit_code_str', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
             [['coefficient'], 'number'],
             [['code'], 'string', 'max' => 15],
-            [['unit_code_str'], 'string', 'max' => 100],
-            ['created_by', 'default', 'value'=>Yii::$app->user->id],
-            [['category_item_id'], 'exist', 'skipOnError' => true, 'targetClass' => MWupaItems::className(), 'targetAttribute' => ['category_item_id' => 'id']],
+            [['sub_item_str', 'sub_item_table'], 'string', 'max' => 255],
+
+            // tambah bagian ini
+            ['created_by', 'default', 'value' => Yii::$app->user->id],
+            ['updated_by', 'default', 'value' => Yii::$app->user->id, 'when' => function ($model) {
+                return !$model->isNewRecord;
+            }],
+            ['deleted_at', 'default', 'value' => time(), 'on' => 'delete'],
+            ['deleted_by', 'default', 'value' => Yii::$app->user->id, 'on' => 'delete'],
+
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['deleted_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['deleted_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['updated_by' => 'id']],
-            [['parent_item_id'], 'exist', 'skipOnError' => true, 'targetClass' => MWupaItems::className(), 'targetAttribute' => ['parent_item_id' => 'id']],
+            [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => MWupaItems::className(), 'targetAttribute' => ['item_id' => 'id']],
+            [['sub_item_group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Settings::className(), 'targetAttribute' => ['sub_item_group_id' => 'id']],
             [['unit_code_id'], 'exist', 'skipOnError' => true, 'targetClass' => MUnitCodes::className(), 'targetAttribute' => ['unit_code_id' => 'id']],
-            [['wupa_master_id'], 'exist', 'skipOnError' => true, 'targetClass' => WupaMasters::className(), 'targetAttribute' => ['wupa_master_id' => 'id']],
         ];
     }
 
@@ -81,13 +97,14 @@ class WupaCoefficients extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'code' => Yii::t('app', 'Code'),
-            'wupa_master_id' => Yii::t('app', 'Wupa Master ID'),
-            'parent_item_id' => Yii::t('app', 'Parent Item ID'),
-            'category_item_id' => Yii::t('app', 'Category Item ID'),
             'item_id' => Yii::t('app', 'Item ID'),
+            'sub_item_group_id' => Yii::t('app', 'Sub Item Group ID'),
+            'sub_item_id' => Yii::t('app', 'Sub Item ID'),
+            'sub_item_str' => Yii::t('app', 'Sub Item Str'),
+            'sub_item_table' => Yii::t('app', 'Sub Item Table'),
+            'coefficient' => Yii::t('app', 'Coefficient'),
             'unit_code_id' => Yii::t('app', 'Unit Code ID'),
             'unit_code_str' => Yii::t('app', 'Unit Code Str'),
-            'coefficient' => Yii::t('app', 'Coefficient'),
             'status' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
@@ -96,16 +113,6 @@ class WupaCoefficients extends \yii\db\ActiveRecord
             'deleted_at' => Yii::t('app', 'Deleted At'),
             'deleted_by' => Yii::t('app', 'Deleted By'),
         ];
-    }
-
-    /**
-     * Gets query for [[CategoryItem]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategoryItem()
-    {
-        return $this->hasOne(MWupaItems::className(), ['id' => 'category_item_id']);
     }
 
     /**
@@ -129,13 +136,23 @@ class WupaCoefficients extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[ParentItem]].
+     * Gets query for [[Item]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getParentItem()
+    public function getItem()
     {
-        return $this->hasOne(MWupaItems::className(), ['id' => 'parent_item_id']);
+        return $this->hasOne(WupaItems::className(), ['id' => 'item_id']);
+    }
+
+    /**
+     * Gets query for [[SubItemGroup]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubItemGroup()
+    {
+        return $this->hasOne(Settings::className(), ['id' => 'sub_item_group_id']);
     }
 
     /**
@@ -156,15 +173,5 @@ class WupaCoefficients extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(Users::className(), ['id' => 'updated_by']);
-    }
-
-    /**
-     * Gets query for [[WupaMaster]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWupaMaster()
-    {
-        return $this->hasOne(WupaMasters::className(), ['id' => 'wupa_master_id']);
     }
 }

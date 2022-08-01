@@ -19,7 +19,7 @@ class WupaCoefficients extends WupaCoefficientsModel
     public function rules()
     {
         return [
-            [['id', 'wupa_master_id', 'parent_item_id', 'category_item_id', 'item_id', 'unit_code_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
+            [['id', 'wupa_master_id', 'item_id', 'category_item_id', 'item_id', 'unit_code_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
             [['code', 'unit_code_str'], 'safe'],
             [['coefficient'], 'number'],
             ['query', 'safe']
@@ -65,7 +65,7 @@ class WupaCoefficients extends WupaCoefficientsModel
         $query->andFilterWhere([
             'id' => $this->id,
             'wupa_master_id' => $this->wupa_master_id,
-            'parent_item_id' => $this->parent_item_id,
+            'item_id' => $this->item_id,
             'category_item_id' => $this->category_item_id,
             'item_id' => $this->item_id,
             'unit_code_id' => $this->unit_code_id,
@@ -81,7 +81,7 @@ class WupaCoefficients extends WupaCoefficientsModel
 
         $query->andFilterWhere(['like', 'code', $this->code])
             ->andFilterWhere(['like', 'unit_code_str', $this->unit_code_str]);
-        
+
         $query->orFilterWhere(['like', 'code', $this->query])
             ->orFilterWhere(['like', 'unit_code_str', $this->query]);
 

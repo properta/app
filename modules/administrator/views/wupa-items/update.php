@@ -1,0 +1,17 @@
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\Pjax;
+
+$this->title = Yii::t('app', 'Ubah Kategori');
+
+?>
+<?php Pjax::begin(); ?>
+<?= $this->render('@app/views/message/alert') ?>
+<div class="update">
+    <?= $this->render('_form', [
+        'model' => $model,
+        'units' => $units
+    ]) ?>
+</div>
+<?php Pjax::end(); ?>

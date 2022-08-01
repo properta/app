@@ -58,11 +58,12 @@ class MUnitCodes extends \yii\db\ActiveRecord
     {
         return [
             [['code', 'title'], 'required'],
+            ['code', 'unique'],
             [['desc'], 'string'],
             [['status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
             [['code'], 'string', 'max' => 15],
             [['title'], 'string', 'max' => 255],
-            ['created_by', 'default', 'value'=>Yii::$app->user->id],
+            ['created_by', 'default', 'value' => Yii::$app->user->id],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['deleted_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['deleted_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['updated_by' => 'id']],

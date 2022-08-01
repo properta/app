@@ -203,7 +203,7 @@ class UnitCodesController extends Controller
             $_file = $gdrive->uploadFile($file->name, $file->tempName, $file->type);
             Yii::$app->response->statusCode = 200;
             return Yii::$app->params['drive']['urlOpen'] . $_file;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Yii::$app->response->statusCode = 500;
         }
     }
@@ -221,7 +221,7 @@ class UnitCodesController extends Controller
         $data = ArrayHelper::getColumn($model, function ($data) {
             return [
                 'id' => $data->id,
-                'text' => $data->title.' | '.$data->code,
+                'text' => $data->title . ' | ' . $data->code,
             ];
         });
         return ['results' => $data ?? []];
