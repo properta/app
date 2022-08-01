@@ -70,7 +70,7 @@ class Projects extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'title', 'building_permit_number', 'contractor_id', 'area_code'], 'required'],
+            [['title', 'building_permit_number', 'contractor_id', 'area_code'], 'required'],
             [['desc'], 'string'],
             [['region_id', 'pic_id', 'contractor_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
             [['code', 'area_code'], 'string', 'max' => 15],

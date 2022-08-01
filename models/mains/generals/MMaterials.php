@@ -126,4 +126,8 @@ class MMaterials extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['id' => 'updated_by']);
     }
+
+    public function getPrice(){
+        return $this->hasMany(MaterialPrices::className(), ['material_id' => 'id']);
+    }
 }

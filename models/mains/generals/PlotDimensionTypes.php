@@ -65,7 +65,13 @@ class PlotDimensionTypes extends \yii\db\ActiveRecord
             [['code'], 'string', 'max' => 15],
             [['title'], 'string', 'max' => 255],
             [['dimension_unit_code_id_str', 'plot_type_str'], 'string', 'max' => 100],
-            ['created_by', 'default', 'value'=>Yii::$app->user->id],
+            ['created_by', 'default', 'value' => Yii::$app->user->id],
+            ['updated_by', 'default', 'value' => Yii::$app->user->id, 'when' => function ($model) {
+                return !$model->isNewRecord;
+            }],
+            ['deleted_at', 'default', 'value' => time(), 'on' => 'delete'],
+            ['deleted_by', 'default', 'value' => Yii::$app->user->id, 'on' => 'delete'],
+            [['desc'], 'filter', 'filter' => '\yii\helpers\HtmlPurifier::process'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['deleted_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['deleted_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['updated_by' => 'id']],

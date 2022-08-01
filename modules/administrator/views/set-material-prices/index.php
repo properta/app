@@ -1,0 +1,100 @@
+<style type="text/css">
+    .float-button{
+        backgroud-color:'#fffff'
+    }
+</style>
+<?php
+
+use yii\helpers\Html;
+use yii\grid\GridView;
+use yii\widgets\Pjax;
+use yii\helpers\Url;
+$this->title = Yii::t('app', 'List of Materials');
+?>
+<?php Pjax::begin(); ?>
+<?= $this->render('@app/views/message/alert') ?>
+<form action="set-material-prices/create" method="post">
+    <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
+    <div class="index">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4> <?= $this->title ?></h4>
+                        <div class="card-header-action">
+                            <?= $this->render('_search', ['model' => $searchModel]) ?>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <?= GridView::widget([
+                                'dataProvider' => $dataProvider,
+                                // 'filterModel' => $searchModel,
+                                'tableOptions' => ['class' => 'table table-striped'],
+                                'summaryOptions' => ['class' => 'badge badge-light m-2'],
+                                'columns' => [
+                                    [
+                                        'class' => 'yii\grid\SerialColumn',
+                                        'header' => 'No.'
+                                    ],
+                                    [
+                                        'attribute' => 'code',
+                                        // 'label' => Yii::t('app','Code'),
+                                        'format' => 'raw',
+                                        'value' => function ($model) {
+                                            return $model->code ?? "-";
+                                        }
+                                    ],
+                                    [
+                                        'attribute' => 'title',
+                                        'label' => Yii::t('app', 'Country'),
+                                        'format' => 'raw',
+                                        'value' => function ($model) {
+                                            return $model->title ?? "-";
+                                        }
+                                    ],
+                                    [
+                                        'attribute' => 'title',
+                                        'label' => Yii::t('app', 'Country'),
+                                        'format' => 'raw',
+                                        'value' => function ($model) {
+                                            $index = array_search(Yii::$app->helper->activeProject, array_column($model->price, 'project_id'));
+                                            if($index!==false){
+                                                $value = $model->price[$index]['price'];
+                                            }else{
+                                                $value = 0;
+                                            }
+                                            return Html::input('text',$model->id,$value, ['class'=>'form-control']);
+                                        }
+                                    ],
+                                ],
+                            ]); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div style="border:solid 15px red; color: orange; background-color: blue; cursor: pointer; "> -->
+        <div style="float: right;position:fixed;
+        bottom:80px; right:40px;">
+            <button class="btn btn-info">Simpan</button>
+        </div>
+    </div>
+</form>
+
+<?php
+$this->registerJsVar('title', Yii::t('app', 'Add Materials'));
+$js = <<< JS
+    $('#modalCreate').click(function (e){
+        $('#modalTitle').html(title)
+        e.preventDefault();
+        let url = $(this).attr('href');
+        $.get(url, function(data) {
+            $('#modal').modal('show').find('#modalContent').html(data)
+        });
+        return false;
+    });
+JS;
+$this->registerJs($js);
+?>
+<?php Pjax::end(); ?>

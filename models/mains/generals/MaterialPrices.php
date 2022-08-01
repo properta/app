@@ -43,7 +43,6 @@ class MaterialPrices extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'required'],
             [['id', 'project_id', 'material_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'], 'integer'],
             [['price'], 'number'],
             [['code'], 'string', 'max' => 15],

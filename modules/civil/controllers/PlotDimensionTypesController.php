@@ -77,6 +77,7 @@ class PlotDimensionTypesController extends Controller
             $msg = "";
             if ($model->load(Yii::$app->request->post())) :
                 Yii::$app->response->format = Response::FORMAT_JSON;
+                $model->project_id = Yii::$app->helper->activeProject;
                 if ($model->save()) :
                     $msg = Yii::t("app", "Data berhasil di tambah");
                     Yii::$app->session->setFlash('success', $msg);

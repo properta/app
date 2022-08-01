@@ -20,18 +20,14 @@ use app\utils\template\Template;
                 <h4><?= $this->title ?></h4>
             </div>
             <div class="card-body">
-                <?= $form->field($model, 'code', Template::template('fas fa-hashtag'))->textInput(['maxlength' => true, 'placeholder' => '0A1B2']) ?>
 
                 <?= $form->field($model, 'title', Template::template('fas fa-edit'))->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'Plot Of Lands ABC')]) ?>
 
                 <?= $form->field($model, 'desc')->textArea(['maxlength' => true, 'placeholder' => Yii::t('app', 'Type Description Here')]) ?>
-                
-                <?= $form->field($model, 'project_id')
-                    ->dropDownList($project??[],['class' => 'form-control select2', 'id' => 'projectId', 'prompt' => Yii::t('app', '--choose one--')]);
-                ?>
-                
-                <?= $form->field($model, 'length', Template::template('fas fa-flag'))->textInput(['maxlength' => true, 'placeholder' => 'PKU001']) ?>
 
+                <?= $form->field($model, 'width', Template::template('fas fa-user'))->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', '100')])->label(Yii::t('app', 'Width')) ?>
+
+                <?= $form->field($model, 'length', Template::template('fas fa-user'))->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', '100')])->label(Yii::t('app', 'Length')) ?>
             </div>
         </div>
     </div>
@@ -40,11 +36,6 @@ use app\utils\template\Template;
         <div class="card">
             <div class="card-body">
                 <div class="form">
-                    <?= $form->field($model, 'width', Template::template('fas fa-user'))->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', '100')])->label(Yii::t('app', 'Width')) ?>
-
-                    <?= $form->field($model, 'dimension_unit_code_id')
-                        ->dropDownList($project??[],['class' => 'form-control select2', 'id' => 'unitCode', 'prompt' => Yii::t('app', '--choose one--')]);
-                    ?>
 
                     <?= $form->field($model, 'dimension_unit_code_id_str', Template::template('fas fa-edit'))->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'Plot Of Lands ABC')]) ?>
 
@@ -54,6 +45,10 @@ use app\utils\template\Template;
                     <?= $form->field($model, 'plot_type_str', Template::template('fas fa-edit'))->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'Plot Of Lands ABC')]) ?>
                     
                     <?= $form->field($model, 'total', Template::template('fas fa-phone'))->textInput(['maxlength' => true, 'placeholder' => '+628 1234 1234 123']) ?>
+
+                    <?= $form->field($model, 'dimension_unit_code_id')
+                    ->dropDownList($project??[],['class' => 'form-control select2', 'id' => 'unitCode', 'prompt' => Yii::t('app', '--choose one--')]);
+                ?>
                 </div>
 
                 <div class="form-group">

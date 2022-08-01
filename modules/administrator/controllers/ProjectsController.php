@@ -77,6 +77,7 @@ class ProjectsController extends Controller
             $msg = "";
             if ($model->load(Yii::$app->request->post())) :
                 Yii::$app->response->format = Response::FORMAT_JSON;
+                // $model->code = Yii::$app->helper->generateCode(6, new Projects, 'code');
                 if ($model->save()) :
                     $msg = Yii::t("app", "Data berhasil di tambah");
                     Yii::$app->session->setFlash('success', $msg);

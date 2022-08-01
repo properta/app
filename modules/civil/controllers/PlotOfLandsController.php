@@ -18,6 +18,10 @@ use yii\filters\{
 use app\models\mains\{
     generals\PlotOfLands,
     generals\Settings,
+    generals\Markers,
+    generals\PlotDimensionTypes,
+    generals\MWindDirections,
+    generals\MUnitCodes,
     searches\PlotOfLands as PlotOfLandsSearch
 };
 use app\utils\{
@@ -40,7 +44,7 @@ class PlotOfLandsController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['index', 'view', 'create', 'update', 'delete', 'validate', 'handle-file'],
+                            'actions' => ['index', 'view', 'create', 'update', 'delete', 'validate', 'handle-file', 'excess-desc', 'markers', 'm-wind-directions', 'm-unit-codes', 'get-dimensions'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
@@ -87,6 +91,7 @@ class PlotOfLandsController extends Controller
             $model = new PlotOfLands();
             $msg = "";
             if ($model->load(Yii::$app->request->post())) :
+                $model->code = Yii::$app->helper->generateCode(6, new PlotOfLands, 'code');
                 if ($model->save()) :
                     $msg = "Data berhasil di tambah";
                     Yii::$app->session->setFlash('success', $msg);
@@ -149,7 +154,25 @@ class PlotOfLandsController extends Controller
                 Yii::$app->session->setFlash('danger', $msg);
             endif;
             return $this->render('update', [
-                'model' => $model
+                'model' => $model,
+                'dimension' => ArrayHelper::map(
+                    PlotDimensionTypes::find()
+                        ->where(['status' => 1])
+                        ->andWhere(['deleted_at' => NULL])
+                        ->all(),
+                    'id',
+                    'title'
+                ),
+                'excessDesc' => ArrayHelper::map(
+                    Settings::find()
+                        ->where(['name'=>'excess_desc'])
+                        ->andWhere(['deleted_at' => NULL])
+                        ->andwhere(['status'=>1])
+                        ->limit(20)
+                        ->all(),
+                    'id',
+                    'title'
+                ),
             ]);
         endif;
         throw new ForbiddenHttpException("You Can't Access This Page");
@@ -206,5 +229,106 @@ class PlotOfLandsController extends Controller
         } catch (Exception $e) {
             Yii::$app->response->statusCode = 500;
         }
+    }
+
+    public function actionExcessDesc()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = Settings::find()
+            ->where(['like', 'name', $term])
+            ->andWhere(['name'=>'excess_desc'])
+            ->andWhere(['deleted_at' => NULL])
+            ->andwhere(['status'=>1])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->value,
+            ];
+        });
+        return ['results' => $data ?? []];
+    }
+
+    public function actionGetDimensions()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = PlotDimensionTypes::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['deleted_at' => NULL])
+            ->andwhere(['status'=>1])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
+    }
+
+    public function actionMarkers()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = Markers::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['deleted_at' => NULL])
+            ->andwhere(['status'=>1])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
+    }
+
+    public function actionMWindDirections()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = MWindDirections::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['deleted_at' => NULL])
+            ->andwhere(['status'=>1])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
+    }
+
+    public function actionMUnitCodes()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $term = Yii::$app->request->get('search') ?? "";
+        $term = trim($term);
+        $model = MUnitCodes::find()
+            ->where(['like', 'title', $term])
+            ->andWhere(['deleted_at' => NULL])
+            ->andwhere(['status'=>1])
+            ->limit(20)
+            ->all();
+        $data = ArrayHelper::getColumn($model, function ($data) {
+            return [
+                'id' => $data->id,
+                'text' => $data->title,
+            ];
+        });
+        return ['results' => $data ?? []];
     }
 }
